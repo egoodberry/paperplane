@@ -1,0 +1,5 @@
+App = {};
+
+$(function() {
+  App.setUpNav();
+});

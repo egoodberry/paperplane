@@ -1,0 +1,45 @@
+body {
+  background: #0e100d;
+  color: white;
+  text-align: center;
+  font-family: "adobe-garamond-pro", "Times New Roman", serif; }
+
+h1, h2, h3 {
+  font-family: "futura-pt", sans-serif; }
+
+h1 {
+  color: white;
+  text-transform: uppercase; }
+
+.cf:before,
+.cf:after {
+  content: " ";
+  /* 1 */
+  display: table;
+  /* 2 */ }
+
+.cf:after {
+  clear: both; }
+
+.cf {
+  *zoom: 1; }
+
+.vr {
+  width: 1px;
+  margin: 0 auto;
+  background: white;
+  height: 115px; }
+
+#header {
+  background: #252324; }
+  #header #logo, #header #brand {
+    border-left: solid 1px #353333;
+    border-right: solid 1px #353333; }
+  #header nav a {
+    font-family: "Courier New", Courier, monospace;
+    color: white;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 1px; }
+    #header nav a.current {
+      border-bottom: solid 1px white; }
