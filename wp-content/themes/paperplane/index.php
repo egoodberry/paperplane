@@ -21,41 +21,37 @@
   <script src="<?php bloginfo('template_directory'); ?>/js/nav.js"></script>
 </head>
 <body>
+
   <div id="header">
+    <div id="header-inner">
 
-    <a id="logo" href="#home" class="visualNav">
-      LOGO
-    </a>
+      <nav>
+        <a href="#reserve">Reserve</a>
+        <a href="#about">About</a>
+        <a href="#menus">Menus</a>
+        <a href="#information">Information</a>
+      </nav>
 
-    <nav>
-      <a href="#reserve">
-        Reserve
+      <a id="logo" href="#home" class="visualNav">
+        <img src="<?php bloginfo('template_directory'); ?>/images/logo.png" alt="Paper Plane" />
       </a>
-      <a href="#about">
-        About
-      </a>
-      <a href="#menus">
-        Menus
-      </a>
-      <a href="#information">
-        Information
-      </a>
-    </nav>
 
-    <div id="brand">
+      <a id="brand" href="#"><div></div></a>
+
     </div>
-
   </div><!-- /header -->
 
   <div id="content">
     <section id="home" class="content">
-      <img src="title.png" alt="Paper Plane" />
+      <img src="<?php bloginfo('template_directory'); ?>/images/title.png" alt="Paper Plane" class="title" />
       <hr />
       <p>Open <i>at</i> 5.00p Tuesday <i>to</i> Saturday</p>
       <div class="vr">&nbsp;</div>
-      <div>340 Church Street</div>
-      <div>Decatur, GA 30030</div>
-      <div>404 377 9300</div>
+      <section class="address">
+        <div>340 Church Street</div>
+        <div>Decatur, GA 30030</div>
+      </section>
+      <div class="phone">404 377 9300</div>
     </section>
 
     <section id="reserve" class="content">
@@ -101,29 +97,31 @@
         <p>Sunday and Monday, Closed</p>
       </section>
 
-      <section>
-        <a href="mailto:info@vicbrands.com">info@vicbrands.com</a>
-        <a href="#">Facebook</a>
+      <section class="links">
+        <a href="mailto:info@vicbrands.com">info@vicbrands.com</a> /
+        <a href="#">Facebook</a> /
         <a href="#">Mailing List</a>
       </section>
 
       <section>
-        340 Church Street
-        Decatur, GA 30030
-        Tel: 404 377 9308
+        <p>340 Church Street</p>
+        <p>Decatur, GA 30030</p>
+        <p>Tel: 404 377 9308</p>
       </section>
 
       <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=340+Church+Street+Decatur,+GA+30030&amp;ie=UTF8&amp;hq=&amp;hnear=340+Church+St,+Decatur,+Georgia+30030&amp;gl=us&amp;t=m&amp;z=14&amp;ll=33.774048,-84.294923&amp;output=embed"></iframe>
 
-      <section>
+      <p class="open-map">
         <a href="https://maps.google.com/maps?q=340+Church+Street+Decatur,+GA+30030&amp;ie=UTF8&amp;hq=&amp;hnear=340+Church+St,+Decatur,+Georgia+30030&amp;gl=us&amp;t=m&amp;z=14&amp;ll=33.774048,-84.294923&amp;source=embed">Open Map</a>
-      </section>
+      </p>
 
     </section>
 
-    <section id="footer">
+    <section id="copyright">
+      © Victory Brands
     </section>
 
   </div><!-- /content -->
 </body>
 </html>
+

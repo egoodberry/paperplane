@@ -1,23 +1,94 @@
 body {
   background: #0e100d;
   color: white;
-  text-align: center; }
+  text-align: center;
+  font-family: "adobe-garamond-pro", "Times New Roman", serif; }
+
+h1, h2 {
+  font-family: "futura-pt", sans-serif; }
 
 h1 {
-  color: white;
-  text-transform: uppercase; }
+  text-transform: uppercase;
+  font-size: 4em;
+  font-weight: 100;
+  letter-spacing: 12px; }
+  h1 .number {
+    font-size: 14px;
+    vertical-align: top;
+    display: inline-block;
+    margin-top: 30px;
+    letter-spacing: 0; }
+
+h3 {
+  font-style: italic; }
+
+a {
+  color: white; }
+
+.cf:before,
+.cf:after {
+  content: " ";
+  /* 1 */
+  display: table;
+  /* 2 */ }
+
+.cf:after {
+  clear: both; }
+
+.cf {
+  *zoom: 1; }
 
 .vr {
   width: 1px;
-  margin: 0 auto;
+  margin: 20px auto;
   background: white;
   height: 115px; }
 
+hr {
+  border-bottom: solid 1px white;
+  width: 45px;
+  margin: 25px auto; }
+
 #header {
   background: #252324; }
+  #header #logo, #header #brand {
+    border-left: solid 1px #353333;
+    border-right: solid 1px #353333; }
   #header nav a {
+    font-family: "Courier New", Courier, monospace;
     color: white;
     text-transform: uppercase;
-    text-decoration: none; }
+    text-decoration: none;
+    letter-spacing: 1px; }
     #header nav a.current {
-      text-decoration: underline; }
+      border-bottom: solid 1px white; }
+
+#home {
+  font-size: 1.5em; }
+  #home .address, #home .phone {
+    font-family: "futura-pt", sans-serif; }
+  #home .phone {
+    letter-spacing: 4px;
+    font-weight: 600;
+    font-size: 1.2em; }
+
+#reserve {
+  background: #211f1f; }
+
+#menus {
+  background: #323131; }
+
+#information {
+  font-size: 1.3em;
+  line-height: 1.7em; }
+  #information .links {
+    margin: 1em 0; }
+  #information .open-map {
+    font-family: "futura-pt", sans-serif;
+    text-transform: uppercase; }
+
+#copyright {
+  font-family: "futura-pt", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: #666666; }
