@@ -1,0 +1,23 @@
+body {
+  background: #0e100d;
+  color: white;
+  text-align: center; }
+
+h1 {
+  color: white;
+  text-transform: uppercase; }
+
+.vr {
+  width: 1px;
+  margin: 0 auto;
+  background: white;
+  height: 115px; }
+
+#header {
+  background: #252324; }
+  #header nav a {
+    color: white;
+    text-transform: uppercase;
+    text-decoration: none; }
+    #header nav a.current {
+      text-decoration: underline; }

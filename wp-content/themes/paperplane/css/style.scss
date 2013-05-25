@@ -1,0 +1,39 @@
+@import "constants";
+
+body {
+  background: $black;
+  color: $white;
+  text-align: center;
+}
+
+h1 {
+  color: $white;
+  text-transform: uppercase;
+}
+h2 {
+}
+h3 {
+}
+
+.vr {
+  width: 1px;
+  margin: 0 auto;
+  background: $white;
+  height: 115px;
+}
+
+#header {
+  background: $charcoal;
+
+  nav {
+    a {
+      color: $white;
+      text-transform: uppercase;
+      text-decoration: none;
+
+      &.current {
+        text-decoration: underline;
+      }
+    }
+  }
+}

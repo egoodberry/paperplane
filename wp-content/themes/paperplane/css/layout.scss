@@ -1,0 +1,22 @@
+@import "constants";
+
+$header-height: 60px;
+#header {
+  height: $header-height;
+  position: fixed;
+  width: 100%;
+
+  #nav {
+    text-align: center;
+  }
+}
+
+#content {
+  padding-top: $header-height;
+
+  > section {
+    padding-top: $header-height;
+
+    height: 700px;
+  }
+}
