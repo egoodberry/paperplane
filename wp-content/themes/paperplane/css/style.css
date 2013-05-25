@@ -64,7 +64,9 @@ hr {
       border-bottom: solid 1px white; }
 
 #home {
-  font-size: 1.5em; }
+  font-size: 1.5em;
+  background: url(../images/home-bg1.jpg) no-repeat;
+  background-size: cover; }
   #home .address, #home .phone {
     font-family: "futura-pt", sans-serif; }
   #home .phone {
@@ -92,3 +94,13 @@ hr {
   text-transform: uppercase;
   letter-spacing: 4px;
   color: #666666; }
+
+@media only screen and (max-width: 767px) {
+  #logo {
+    border: none !important; }
+
+  h1 {
+    font-size: 1.5em; }
+    h1 .number {
+      margin: auto;
+      vertical-align: middle; } }

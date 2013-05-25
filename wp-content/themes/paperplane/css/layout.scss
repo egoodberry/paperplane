@@ -67,3 +67,36 @@ $header-height: 60px;
   }
 }
 
+@media only screen and (max-width: 767px) {
+  #header {
+    height: auto;
+    position: static;
+
+    #header-inner {
+      width: auto;
+
+      #logo {
+        float: left;
+      }
+      #brand {
+        display: none;
+      }
+
+      nav {
+        position: static;
+        width: 150px;
+        float: right;
+        text-align: left;
+
+        a {
+          display: block;
+          margin: 4px 0;
+        }
+      }
+    }
+  }
+
+  #content {
+    padding-top: 0;
+  }
+}

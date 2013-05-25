@@ -42,3 +42,25 @@
   margin-top: 170px; }
 #home .phone {
   margin-top: 50px; }
+
+@media only screen and (max-width: 767px) {
+  #header {
+    height: auto;
+    position: static; }
+    #header #header-inner {
+      width: auto; }
+      #header #header-inner #logo {
+        float: left; }
+      #header #header-inner #brand {
+        display: none; }
+      #header #header-inner nav {
+        position: static;
+        width: 150px;
+        float: right;
+        text-align: left; }
+        #header #header-inner nav a {
+          display: block;
+          margin: 4px 0; }
+
+  #content {
+    padding-top: 0; } }

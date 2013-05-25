@@ -85,6 +85,8 @@ hr {
 
 #home {
   font-size: 1.5em;
+  background: url(../images/home-bg1.jpg) no-repeat;
+  background-size: cover;
 
   .address, .phone {
     font-family: $header-font;
@@ -123,4 +125,19 @@ hr {
   text-transform: uppercase;
   letter-spacing: 4px;
   color: $light-gray;
+}
+
+
+@media only screen and (max-width: 767px) {
+  #logo {
+    border: none !important;
+  }
+  h1 {
+    font-size: 1.5em;
+
+    .number {
+      margin: auto;
+      vertical-align: middle;
+    }
+  }
 }
