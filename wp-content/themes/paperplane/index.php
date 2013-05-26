@@ -23,6 +23,10 @@
 </head>
 <body>
 
+  <?php if (is_page()) { ?>
+    yay
+  <?php } else { ?>
+
   <div id="header" class="cf">
     <div id="header-inner">
 
@@ -80,6 +84,10 @@
       </h1>
       <div class="vr">&nbsp;</div>
 
+      <div class="container cf">
+        <?php show_menus(); ?>
+      </div>
+
     </section>
 
     <section id="information" class="content">
@@ -123,6 +131,8 @@
     </section>
 
   </div><!-- /content -->
+
+  <?php } ?>
+
 </body>
 </html>
-
