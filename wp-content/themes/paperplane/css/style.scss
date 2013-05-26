@@ -161,14 +161,18 @@ hr {
     .menu-item {
       margin-bottom: 1em;
 
-      .name {
+      .name-and-description {
         float: left;
-        text-transform: uppercase;
-      }
-      .description {
-        float: left;
-        margin-left: .3em;
-        font-style: italic;
+        text-align: left;
+        width: 90%;
+
+        .name {
+          text-transform: uppercase;
+        }
+        .description {
+          margin-left: .3em;
+          font-style: italic;
+        }
       }
       .price {
         float: right;

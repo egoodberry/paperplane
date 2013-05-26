@@ -75,6 +75,10 @@ iframe {
 
   #content {
     padding-top: 0; }
+    #content #menus .menu-item .name-and-description {
+      float: none;
+      text-align: center;
+      width: auto; }
     #content #menus .menu-item span {
       float: none;
       display: block; } }

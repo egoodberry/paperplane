@@ -114,9 +114,17 @@ iframe {
   #content {
     padding-top: 0;
 
-    #menus .menu-item span {
-      float: none;
-      display: block;
+    #menus .menu-item {
+      .name-and-description {
+        float: none;
+        text-align: center;
+        width: auto;
+      }
+
+      span {
+        float: none;
+        display: block;
+      }
     }
   }
 }

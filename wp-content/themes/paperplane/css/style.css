@@ -121,13 +121,15 @@ hr {
     margin-bottom: 2em; }
     #menus .menu .menu-item {
       margin-bottom: 1em; }
-      #menus .menu .menu-item .name {
+      #menus .menu .menu-item .name-and-description {
         float: left;
-        text-transform: uppercase; }
-      #menus .menu .menu-item .description {
-        float: left;
-        margin-left: .3em;
-        font-style: italic; }
+        text-align: left;
+        width: 90%; }
+        #menus .menu .menu-item .name-and-description .name {
+          text-transform: uppercase; }
+        #menus .menu .menu-item .name-and-description .description {
+          margin-left: .3em;
+          font-style: italic; }
       #menus .menu .menu-item .price {
         float: right; }
 

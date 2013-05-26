@@ -25,7 +25,7 @@
 <body>
 
   <?php if (is_page()) { ?>
-    yay
+    Reservations coming soon.
   <?php } else { ?>
 
   <div id="header" class="cf">
