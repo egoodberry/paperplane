@@ -1033,37 +1033,6 @@ function woo_curPageURL() {
 /* Custom Post Type - Slides */
 /*-----------------------------------------------------------------------------------*/
 
-add_action( 'init', 'woo_add_slides' );
-function woo_add_slides() 
-{
-  $labels = array(
-    'name' => _x( 'Slides', 'post type general name', 'woothemes' ),
-    'singular_name' => _x( 'Slide', 'post type singular name', 'woothemes' ),
-    'add_new' => _x( 'Add New', 'slide', 'woothemes'),
-    'add_new_item' => __( 'Add New Slide', 'woothemes'),
-    'edit_item' => __( 'Edit Slide', 'woothemes'),
-    'new_item' => __( 'New Slide', 'woothemes'),
-    'view_item' => __( 'View Slide', 'woothemes'),
-    'search_items' => __( 'Search Slides', 'woothemes'),
-    'not_found' =>  __( 'No slides found', 'woothemes'),
-    'not_found_in_trash' => __( 'No slides found in Trash', 'woothemes' ), 
-    'parent_item_colon' => ''
-  );
-  $args = array(
-    'labels' => $labels,
-    'public' => true,
-    'publicly_queryable' => true,
-    'show_ui' => true, 
-    'query_var' => true,
-    'rewrite' => true,
-    'capability_type' => 'post',
-    'hierarchical' => false,
-    'menu_icon' => get_template_directory_uri() .'/includes/images/slides.png',
-    'menu_position' => null,
-    'supports' => array('title','editor',/*'author','thumbnail','excerpt','comments'*/)
-  ); 
-  register_post_type('slide',$args);
-}
 
 
 function woo_search_filter($query) {
