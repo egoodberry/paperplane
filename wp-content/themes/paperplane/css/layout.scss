@@ -4,14 +4,14 @@
   box-sizing: border-box;
 }
 
-$header-height: 60px;
 #header {
   height: $header-height;
   position: fixed;
+  z-index: 100;
   width: 100%;
 
   #header-inner {
-    width: 975px;
+    width: $header-width;
     margin: 0 auto;
     position: relative;
 
@@ -58,12 +58,23 @@ $header-height: 60px;
   }
 }
 
-#home {
+section#home {
+  padding: 0 0 13em 0;
+
   .title {
     margin-top: 170px;
   }
   .phone {
     margin-top: 50px;
+  }
+}
+
+section#about {
+  h1 {
+    margin-top: $header-height;
+  }
+  .slideshow .nav {
+    top: 200px;
   }
 }
 
@@ -102,5 +113,10 @@ iframe {
 
   #content {
     padding-top: 0;
+
+    #menus .menu-item span {
+      float: none;
+      display: block;
+    }
   }
 }

@@ -18,6 +18,7 @@
   <script type="text/javascript" src="//use.typekit.net/kzj8upu.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   <script src="<?php bloginfo('template_directory'); ?>/js/app.js"></script>
+  <script src="<?php bloginfo('template_directory'); ?>/js/slideshow.js"></script>
   <script src="<?php bloginfo('template_directory'); ?>/js/nav.js"></script>
   <script src="<?php bloginfo('template_directory'); ?>/js/bg.js"></script>
 </head>
@@ -48,6 +49,10 @@
 
   <div id="content">
     <section id="home" class="content">
+
+      <!-- home background -->
+      <?php show_slideshow('Home Photos') ?>
+
       <img src="<?php bloginfo('template_directory'); ?>/images/title.png" alt="Paper Plane" class="title" />
       <hr />
       <p>Open <i>at</i> 5.00p Tuesday <i>to</i> Saturday</p>
@@ -69,12 +74,34 @@
     </section>
 
     <section id="about" class="content">
-      <h1>
-        <span class="number">03</span>
-        About
-      </h1>
-      <div class="vr">&nbsp;</div>
+      <!-- about background -->
+      <?php show_slideshow('About Photos') ?>
 
+      <div class="container">
+
+        <h1>
+          <span class="number">03</span>
+          About
+        </h1>
+        <div class="vr">&nbsp;</div>
+
+        <div class="row">
+          <div class="grid_12">
+            <p>
+              Our story begins with the question: What to drink? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse erat tellus, facilisis et commodo id, lacinia in purus.
+            </p>
+
+            <p>
+              We are Paul Calvert, Ian Jones, and Caleb Wheelus (one of us had to take the picture). Nunc malesuada convallis risus, vitae eleifend ipsum euismod in. Fusce vitae quam nisi, sed rutrum libero. Morbi eget justo eros. Curabitur placerat nisi non turpis auctor eget rutrum nulla volutpat.
+            </p>
+
+            <p>
+              Nisi nibh, ac euismod libero. Curabitur mauris sem, sollicitudin vel semper non, malesuada nec tellus. Nulla facilisi. Our answer: Paper Plane.
+            </p>
+          </div>
+        </div>
+
+      </div>
     </section>
 
     <section id="menus" class="content">

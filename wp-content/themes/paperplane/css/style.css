@@ -59,7 +59,8 @@ hr {
   margin: 25px auto; }
 
 #header {
-  background: #252324; }
+  background: #252324;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.5); }
   #header #logo, #header #brand {
     border-left: solid 1px #353333;
     border-right: solid 1px #353333; }
@@ -73,19 +74,46 @@ hr {
     #header nav a.current {
       border-bottom: solid 1px white; }
 
-#home {
-  background: url(../images/home-bg1.jpg) no-repeat;
-  background-size: cover; }
-  #home .address, #home .phone {
-    font-family: "futura-pt", sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 4px; }
-  #home .phone {
-    font-weight: 600;
-    font-size: 1.2em; }
+#home, #about {
+  position: relative;
+  overflow: hidden; }
+  #home *, #about * {
+    position: relative;
+    z-index: 2; }
+  #home .slideshow, #about .slideshow {
+    position: absolute;
+    z-index: 1;
+    width: 100%; }
+    #home .slideshow .nav, #about .slideshow .nav {
+      position: absolute;
+      z-index: 10;
+      width: 24px;
+      height: 52px;
+      cursor: pointer;
+      top: 310px; }
+      #home .slideshow .nav:hover, #about .slideshow .nav:hover {
+        background-position-y: -52px; }
+      #home .slideshow .nav.prev, #about .slideshow .nav.prev {
+        left: 150px;
+        background-image: url(../images/nav-left.png); }
+      #home .slideshow .nav.next, #about .slideshow .nav.next {
+        right: 150px;
+        background-image: url(../images/nav-right.png); }
+
+#home .address, #home .phone {
+  font-family: "futura-pt", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 4px; }
+#home .phone {
+  font-weight: 600;
+  font-size: 1.2em; }
 
 #reserve {
   background: #211f1f; }
+
+#about p {
+  margin: 1em 0;
+  line-height: 1.7em; }
 
 #menus {
   background: #323131; }
@@ -125,4 +153,7 @@ hr {
     font-size: 1.5em; }
     h1 .number {
       margin: auto;
-      vertical-align: middle; } }
+      vertical-align: middle; }
+
+  .slideshow .nav {
+    display: none; } }

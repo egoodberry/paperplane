@@ -4,6 +4,7 @@
 #header {
   height: 60px;
   position: fixed;
+  z-index: 100;
   width: 100%; }
   #header #header-inner {
     width: 975px;
@@ -38,10 +39,17 @@
   #content > section {
     padding: 60px 0; }
 
-#home .title {
-  margin-top: 170px; }
-#home .phone {
-  margin-top: 50px; }
+section#home {
+  padding: 0 0 13em 0; }
+  section#home .title {
+    margin-top: 170px; }
+  section#home .phone {
+    margin-top: 50px; }
+
+section#about h1 {
+  margin-top: 60px; }
+section#about .slideshow .nav {
+  top: 200px; }
 
 iframe {
   margin: 1.5em 0; }
@@ -66,4 +74,7 @@ iframe {
           margin: 4px 0; }
 
   #content {
-    padding-top: 0; } }
+    padding-top: 0; }
+    #content #menus .menu-item span {
+      float: none;
+      display: block; } }
