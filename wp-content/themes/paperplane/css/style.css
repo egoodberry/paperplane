@@ -110,6 +110,31 @@ hr {
 
 #reserve {
   background: #211f1f; }
+  #reserve .reserve-warning {
+    font-family: "futura-pt", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin: 2em 0; }
+  #reserve a {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 5px 50px;
+    font-family: "futura-pt", sans-serif;
+    font-size: 1em;
+    color: #fff;
+    background: transparent;
+    border: solid 1px white;
+    -webkit-appearance: none;
+    cursor: pointer;
+    text-decoration: none;
+    border-color: #a6bac4;
+    border-width: 6px;
+    color: #a6bac4;
+    padding: 20px 65px;
+    display: inline-block;
+    margin-bottom: 2em; }
+  #reserve em {
+    font-size: .8em; }
 
 #about p {
   margin: 1em 0;
@@ -146,6 +171,171 @@ hr {
   text-transform: uppercase;
   letter-spacing: 4px;
   color: #666666; }
+
+#wootable-calendar {
+  width: 80%;
+  margin: 0 auto; }
+
+.ui-datepicker-header {
+  background: #414042;
+  padding: 10px; }
+
+.ui-datepicker-prev, .ui-datepicker-next {
+  cursor: pointer;
+  width: 10px;
+  height: 22px; }
+  .ui-datepicker-prev span, .ui-datepicker-next span {
+    display: none; }
+
+.ui-datepicker-prev {
+  float: left;
+  background-image: url(../images/calendar-prev.png); }
+
+.ui-datepicker-next {
+  float: right;
+  background-image: url(../images/calendar-next.png); }
+
+.ui-datepicker-title {
+  font-family: "futura-pt", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px; }
+
+.ui-datepicker-calendar {
+  width: 100%;
+  font-family: "futura-pt", sans-serif;
+  text-transform: uppercase;
+  text-align: center;
+  border-spacing: 0;
+  border-collapse: collapse; }
+  .ui-datepicker-calendar td, .ui-datepicker-calendar th {
+    width: 14.2%;
+    padding: 8px 0;
+    border: solid 1px #0e100d; }
+    .ui-datepicker-calendar td *, .ui-datepicker-calendar th * {
+      display: block;
+      text-align: center; }
+  .ui-datepicker-calendar th {
+    background: #252324; }
+  .ui-datepicker-calendar td {
+    background: #414042; }
+  .ui-datepicker-calendar .ui-datepicker-unselectable {
+    color: #0e100d; }
+  .ui-datepicker-calendar .ui-datepicker-today {
+    background: #666666; }
+  .ui-datepicker-calendar .ui-datepicker-current-day {
+    background: white; }
+    .ui-datepicker-calendar .ui-datepicker-current-day a {
+      color: #0e100d; }
+  .ui-datepicker-calendar a {
+    text-decoration: none; }
+
+input[type=submit], button {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 5px 50px;
+  font-family: "futura-pt", sans-serif;
+  font-size: 1em;
+  color: #fff;
+  background: transparent;
+  border: solid 1px white;
+  -webkit-appearance: none;
+  cursor: pointer;
+  text-decoration: none; }
+
+label {
+  display: inline-block;
+  font-family: "futura-pt", sans-serif;
+  text-transform: uppercase;
+  float: left;
+  width: 20%;
+  margin-top: 5px; }
+
+input[type=text], textarea, .customSelect {
+  background: white;
+  border: none;
+  margin-left: 0;
+  font-family: "adobe-garamond-pro", "Times New Roman", serif;
+  font-size: 21px; }
+
+input[type=text], .customSelect {
+  height: 40px; }
+
+input[type=text], textarea {
+  width: 80%;
+  padding: 10px 20px; }
+
+.form-field {
+  margin-bottom: 15px;
+  text-align: left; }
+
+.customSelectInner {
+  color: #0e100d;
+  margin-top: 7px;
+  text-align: center; }
+
+form {
+  padding-bottom: 4em; }
+
+.reservations-form .people-time > * {
+  float: left; }
+.reservations-form .customSelect, .reservations-form select {
+  width: 30%;
+  padding-right: 15px;
+  background: white url(../images/arrow-down.png) no-repeat right 5px top 50%; }
+  .reservations-form .customSelect .customSelectInner, .reservations-form select .customSelectInner {
+    padding-left: 10px; }
+.reservations-form .reservation-time-label {
+  padding-left: 10px; }
+.reservations-form .reservation_time {
+  float: right; }
+.reservations-form label.error {
+  float: none;
+  width: auto;
+  font-family: "adobe-garamond-pro", "Times New Roman", serif;
+  font-style: italic;
+  text-transform: none;
+  padding-left: 20%; }
+  .reservations-form label.error.valid {
+    display: none !important; }
+
+.ui-dialog {
+  background: #252324;
+  padding: 15px 40px;
+  border: solid 1px white;
+  box-shadow: 0px 5px 50px rgba(0, 0, 0, 0.8); }
+  .ui-dialog .ui-dialog-titlebar {
+    font-family: "futura-pt", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px; }
+  .ui-dialog .ui-dialog-content {
+    height: auto !important;
+    margin: 1em 0; }
+  .ui-dialog .ui-dialog-titlebar-close {
+    display: none; }
+
+.reservations-back {
+  margin: 2em 0 3em 0;
+  font-family: "Courier New", Courier, monospace;
+  font-size: .8em;
+  letter-spacing: 1px;
+  text-transform: uppercase; }
+  .reservations-back a {
+    text-decoration: none; }
+    .reservations-back a:hover {
+      text-decoration: underline; }
+
+.reserve-header {
+  margin: .5em 0 2em 0; }
+
+.reserve-submit {
+  margin: 3em 0; }
+
+.woo-sc-box {
+  border: solid 1px #fff;
+  width: 700px;
+  margin: 0 auto;
+  margin-bottom: 3em;
+  padding: 10px 25px; }
 
 @media only screen and (max-width: 767px) {
   #logo {

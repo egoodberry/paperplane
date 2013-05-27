@@ -65,6 +65,7 @@ hr {
   margin: 25px auto;
 }
 
+
 #header {
   background: $charcoal;
   box-shadow: 0px 3px 5px rgba(0,0,0,.5);
@@ -90,6 +91,20 @@ hr {
       }
     }
   }
+}
+
+@mixin button {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 5px 50px;
+  font-family: $header-font;
+  font-size: 1em;
+  color: #fff;
+  background: transparent;
+  border: solid 1px $white;
+  -webkit-appearance: none;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 #home, #about {
@@ -143,6 +158,25 @@ hr {
 
 #reserve {
   background: $bg-reserve;
+
+  .reserve-warning {
+    font-family: $header-font;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin: 2em 0;
+  }
+  a {
+    @include button;
+    border-color: $blue;
+    border-width: 6px;
+    color: $blue;
+    padding: 20px 65px;
+    display: inline-block;
+    margin-bottom: 2em;
+  }
+  em {
+    font-size: .8em;
+  }
 }
 
 #about {
@@ -201,6 +235,203 @@ hr {
   text-transform: uppercase;
   letter-spacing: 4px;
   color: $light-gray;
+}
+
+// RESERVATIONS
+
+// datepicker
+#wootable-calendar {
+  width: 80%;
+  margin: 0 auto;
+}
+.ui-datepicker-header {
+  background: $calendar-gray;
+  padding: 10px;
+}
+.ui-datepicker-prev, .ui-datepicker-next {
+  cursor: pointer;
+  width: 10px;
+  height: 22px;
+
+  span {
+    display: none;
+  }
+}
+.ui-datepicker-prev {
+  float: left;
+  background-image: url(../images/calendar-prev.png);
+}
+.ui-datepicker-next {
+  float: right;
+  background-image: url(../images/calendar-next.png);
+}
+.ui-datepicker-title {
+  font-family: $header-font;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.ui-datepicker-calendar {
+  width: 100%;
+  font-family: $header-font;
+  text-transform: uppercase;
+  text-align: center;
+  border-spacing:0;
+  border-collapse:collapse;
+
+  td, th {
+    width: 14.2%;
+    padding: 8px 0;
+    border: solid 1px $black;
+
+    * {
+      display: block;
+      text-align: center;
+    }
+  }
+  th {
+    background: $charcoal;
+  }
+  td {
+    background: $calendar-gray;
+  }
+
+  .ui-datepicker-unselectable {
+    color: $black;
+  }
+  .ui-datepicker-today {
+    background: $light-gray;
+  }
+  .ui-datepicker-current-day {
+    background: $white;
+    a {
+      color: $black;
+    }
+  }
+
+  a {
+    text-decoration: none;
+  }
+}
+
+// forms
+input[type=submit], button {
+  @include button;
+}
+label {
+  display: inline-block;
+  font-family: $header-font;
+  text-transform: uppercase;
+  float: left;
+  width: 20%;
+  margin-top: 5px;
+}
+input[type=text], textarea, .customSelect {
+  background: $white;
+  border: none;
+  margin-left: 0;
+  font-family: $paragraph-font;
+  font-size: 21px;
+}
+input[type=text], .customSelect {
+  height: 40px;
+}
+input[type=text], textarea {
+  width: 80%;
+  padding: 10px 20px;
+}
+.form-field {
+  margin-bottom: 15px;
+  text-align: left;
+}
+.customSelectInner {
+  color: $black;
+  margin-top: 7px;
+  text-align: center;
+}
+form {
+  padding-bottom: 4em;
+}
+.reservations-form {
+  .people-time {
+    > * {
+      float: left;
+    }
+  }
+  .customSelect, select {
+    width: 30%;
+    padding-right: 15px;
+    background: $white url(../images/arrow-down.png) no-repeat right 5px top 50%;
+    .customSelectInner {
+      padding-left: 10px;
+    }
+  }
+  .reservation-time-label {
+    padding-left: 10px;
+  }
+  .reservation_time {
+    float: right;
+  }
+  label.error {
+    float: none;
+    width: auto;
+    font-family: $paragraph-font;
+    font-style: italic;
+    text-transform: none;
+    padding-left: 20%;
+    &.valid {
+      display: none !important; // weird invisible labels being rendered inline
+    }
+  }
+}
+
+.ui-dialog {
+  background: $charcoal;
+  padding: 15px 40px;
+  border: solid 1px $white;
+  box-shadow: 0px 5px 50px rgba(0,0,0,.8em);
+
+  .ui-dialog-titlebar {
+    font-family: $header-font;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .ui-dialog-content {
+    height: auto !important;
+    margin: 1em 0;
+  }
+
+  .ui-dialog-titlebar-close {
+    display: none;
+  }
+}
+
+.reservations-back {
+  margin: 2em 0 3em 0;
+  font-family: $nav-font;
+  font-size: .8em;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  a {
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+.reserve-header {
+  margin: .5em 0 2em 0;
+}
+.reserve-submit {
+  margin: 3em 0;
+}
+// confirmation
+.woo-sc-box {
+  border: solid 1px #fff;
+  width: 700px;
+  margin: 0 auto;
+  margin-bottom: 3em;
+  padding: 10px 25px;
 }
 
 

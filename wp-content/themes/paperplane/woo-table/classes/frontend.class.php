@@ -46,1923 +46,1929 @@ TABLE OF CONTENTS
 
 -----------------------------------------------------------------------------------*/
 
-	class WooTable_FrontEnd {
+ class WooTable_FrontEnd {
 
-		/*----------------------------------------
-	 	  Class Variables
-	 	  ----------------------------------------
+  /*----------------------------------------
+     Class Variables
+     ----------------------------------------
 
-	 	  * Setup of variable placeholders, to be
-	 	  * populated when the constructor runs.
-	 	----------------------------------------*/
+     * Setup of variable placeholders, to be
+     * populated when the constructor runs.
+   ----------------------------------------*/
 
-		var $plugin_path;
-		var $plugin_url;
-		var $plugin_prefix;
+  var $plugin_path;
+  var $plugin_url;
+  var $plugin_prefix;
 
-		var $errors;
-		var $message;
-		var $bookings_page;
-		var $manage_page;
+  var $errors;
+  var $message;
+  var $bookings_page;
+  var $manage_page;
 
-		var $fields_detail;
-		var $fields_for_form;
+  var $fields_detail;
+  var $fields_for_form;
 
-		/*----------------------------------------
-	 	  WooTable_FrontEnd()
-	 	  ----------------------------------------
+  /*----------------------------------------
+     WooTable_FrontEnd()
+     ----------------------------------------
 
-	 	  * Constructor function.
-	 	  * Sets up the class and registers
-	 	  * variable action hooks.
+     * Constructor function.
+     * Sets up the class and registers
+     * variable action hooks.
 
-	 	  * Params:
-	 	  * - String $plugin_path
-	 	  * - String $plugin_url
-	 	----------------------------------------*/
+     * Params:
+     * - String $plugin_path
+     * - String $plugin_url
+   ----------------------------------------*/
 
-		function WooTable_FrontEnd ( $plugin_path, $plugin_url, $plugin_prefix ) {
+  function WooTable_FrontEnd ( $plugin_path, $plugin_url, $plugin_prefix ) {
 
-			$this->init( $plugin_path, $plugin_url, $plugin_prefix );
+   $this->init( $plugin_path, $plugin_url, $plugin_prefix );
 
-		} // End WooTable_FrontEnd()
+  } // End WooTable_FrontEnd()
 
-		/*----------------------------------------
-	 	  init()
-	 	  ----------------------------------------
+  /*----------------------------------------
+     init()
+     ----------------------------------------
 
-	 	  * This guy runs the show.
-	 	  * Rocket boosters... engage!
-	 	----------------------------------------*/
+     * This guy runs the show.
+     * Rocket boosters... engage!
+   ----------------------------------------*/
 
-		public function init ( $plugin_path, $plugin_url, $plugin_prefix ) {
+  public function init ( $plugin_path, $plugin_url, $plugin_prefix ) {
 
-			global $wootable;
+   global $wootable;
 
-			$this->plugin_path = $plugin_path;
-			$this->plugin_url = $plugin_url;
-			$this->plugin_prefix = $plugin_prefix;
+   $this->plugin_path = $plugin_path;
+   $this->plugin_url = $plugin_url;
+   $this->plugin_prefix = $plugin_prefix;
 
-			$this->errors = array();
-			$this->message = '';
-			$this->bookings_page = get_option( $this->plugin_prefix . 'page_booking' );
-			$this->manage_page = get_option( $this->plugin_prefix . 'page_manage' );
+   $this->errors = array();
+   $this->message = '';
+   $this->bookings_page = get_option( $this->plugin_prefix . 'page_booking' );
+   $this->manage_page = get_option( $this->plugin_prefix . 'page_manage' );
 
-			// WPML compatibility.
-			if( function_exists( 'icl_object_id' ) ) {
-				$this->bookings_page = icl_object_id( $this->bookings_page, 'page', true );
-				$this->manage_page = icl_object_id( $this->manage_page, 'page', true );
-			}
+   // WPML compatibility.
+   if( function_exists( 'icl_object_id' ) ) {
+    $this->bookings_page = icl_object_id( $this->bookings_page, 'page', true );
+    $this->manage_page = icl_object_id( $this->manage_page, 'page', true );
+   }
 
-			// Frontend actions and filters
-			if ( ! is_admin() ) {
+   // Frontend actions and filters
+   if ( ! is_admin() ) {
 
-				add_filter( 'the_content', array( &$this, 'filter_content' ) );
-				add_action( 'wp', array( &$this, 'form_processing' ) );
+    add_filter( 'the_content', array( &$this, 'filter_content' ) );
+    add_action( 'wp', array( &$this, 'form_processing' ) );
 
-				// if ( is_page( $this->bookings_page ) ) {
+    // if ( is_page( $this->bookings_page ) ) {
 
-					$this->register_enqueues();
+     $this->register_enqueues();
 
-				// } // End IF Statement
+    // } // End IF Statement
 
-				// If the system is trying to make an AJAX call, include our AJAX functions.
-				if ( isset( $_POST['ajax'] ) ) {
+    // If the system is trying to make an AJAX call, include our AJAX functions.
+    if ( isset( $_POST['ajax'] ) ) {
 
-					$this->ajax_functions();
+     $this->ajax_functions();
 
-				} // End IF Statement
+    } // End IF Statement
 
-			} // End IF Statement
+   } // End IF Statement
 
-		} // End init()
+  } // End init()
 
-		/*----------------------------------------
-	 	  filter_content()
-	 	  ----------------------------------------
+  /*----------------------------------------
+     filter_content()
+     ----------------------------------------
 
-	 	  * Adds the booking form, validation
-	 	  * notices and messages to the_content()
-	 	  * on the user-selected bookings page.
-	 	----------------------------------------*/
+     * Adds the booking form, validation
+     * notices and messages to the_content()
+     * on the user-selected bookings page.
+   ----------------------------------------*/
 
-	 	public function filter_content ( $content ) {
+   public function filter_content ( $content ) {
 
-	 		if ( $this->bookings_page ) {
+    if ( $this->bookings_page ) {
 
-	 			// Set the default as "we're not on an update screen".
-	 			$_is_update = false;
+     // Set the default as "we're not on an update screen".
+     $_is_update = false;
 
-	 			if ( is_page( $this->bookings_page ) ) {
+     if ( is_page( $this->bookings_page ) ) {
 
-	 				// Concatonate either the success, failure or error messages.
-	 				if ( ( isset($_POST['reservation_widget']) ) && ( $_POST['reservation_widget'] == 'widget' ) && ( ! isset( $_REQUEST['action'] ) ) ) {
+      // Concatonate either the success, failure or error messages.
+      if ( ( isset($_POST['reservation_widget']) ) && ( $_POST['reservation_widget'] == 'widget' ) && ( ! isset( $_REQUEST['action'] ) ) ) {
 
-	 					$content .= '<p class="woo-sc-box note">' . __( 'Please fill out the form below to complete your booking.', 'woothemes' ) . '</p>';
+       $content .= '<p class="woo-sc-box note">' . __( 'Please fill out the form below to complete your booking.', 'woothemes' ) . '</p>';
 
-	 				// UPDATE AN EXISTING BOOKING - 2010-11-04.
+      // UPDATE AN EXISTING BOOKING - 2010-11-04.
 
-	 				} else if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'update' && isset( $_REQUEST['id'] ) && is_numeric( $_REQUEST['id'] ) && ! isset( $_REQUEST['is_updated'] ) ) {
+      } else if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'update' && isset( $_REQUEST['id'] ) && is_numeric( $_REQUEST['id'] ) && ! isset( $_REQUEST['is_updated'] ) ) {
 
-	 					$content .= '<p class="woo-sc-box note">' . __( 'Please fill out the form below to update your existing booking.', 'woothemes' ) . '</p>';
+       $content .= '<p class="woo-sc-box note">' . __( 'Please fill out the form below to update your existing booking.', 'woothemes' ) . '</p>';
 
-	 					// Get the data for the existing booking.
+       // Get the data for the existing booking.
 
-	 					$_id = (int) $_REQUEST['id'];
+       $_id = (int) $_REQUEST['id'];
 
-	 					$_bookingdata = get_post_custom( $_id );
+       $_bookingdata = get_post_custom( $_id );
 
-	 					$_fields = array( 'reservation_date', 'reservation_time', 'number_of_people', 'contact_tel', 'contact_name', 'contact_email', 'reservation_instructions' );
+       $_fields = array( 'reservation_date', 'reservation_time', 'number_of_people', 'contact_tel', 'contact_name', 'contact_email', 'reservation_instructions' );
 
-	 					foreach ( $_fields as $_f ) {
+       foreach ( $_fields as $_f ) {
 
-	 						$this->fields_for_form[$_f] = $_bookingdata[$_f][0];
+        $this->fields_for_form[$_f] = $_bookingdata[$_f][0];
 
-	 					} // End FOREACH Loop
+       } // End FOREACH Loop
 
-	 					// Set a flag for if we're on an update screen.
-	 					$_is_update = true;
+       // Set a flag for if we're on an update screen.
+       $_is_update = true;
 
-	 				} else {
+      } else {
 
-	 					$content .= $this->display_message();
+       $content .= $this->display_message();
 
-	 				} // End IF Statement
+      } // End IF Statement
 
-	 				$content .= '<form name="wootable-booking-form" method="post" action="">' . "\n";
+      $content .= '<form name="wootable-booking-form" method="post" action="">' . "\n";
 
-	 					$reservation_date_real = $this->fields_for_form['reservation_date'];
+       $reservation_date_real = $this->fields_for_form['reservation_date'];
 
-	 					if ( ! $reservation_date_real ) { $reservation_date_real = date( 'Y-m-d' ); } // End IF Statement
+       if ( ! $reservation_date_real ) { $reservation_date_real = date( 'Y-m-d' ); } // End IF Statement
 
-	 					$content .= '<input type="hidden" name="page_id" id="page_id" class="input-page_id input-text" value="' . $this->bookings_page . '" />' . "\n";
-	 					$content .= '<input type="hidden" name="is_update" id="is_update" class="input-is_update input-text" value="' . $_is_update . '" />' . "\n";
+       $content .= '<input type="hidden" name="page_id" id="page_id" class="input-page_id input-text" value="' . $this->bookings_page . '" />' . "\n";
+       $content .= '<input type="hidden" name="is_update" id="is_update" class="input-is_update input-text" value="' . $_is_update . '" />' . "\n";
 
-		 				$content .= '<div id="wootable-calendar-holder"><h3>'. __('Select the date for your reservation:','woothemes') .'</h3><div id="wootable-calendar"></div></div><!--/#wootable-calendar-holder-->' . "\n";
-		 				$content .= '<input type="hidden" name="reservation_date" id="reservation_date" class="input-reservation_date input-text required" value="' . $this->fields_for_form['reservation_date'] . '" />' . "\n";
-		 				$content .= '<input type="hidden" name="reservation_date_real" id="reservation_date_real" class="input-reservation_date_real input-text required" value="' . $reservation_date_real . '" />' . "\n";
 
-		 				// Begin the bookings form.
-		 				$content .= '<div class="reservations-form">' . "\n";
-		 				$content .= '<h3>'. __('Reservation Information:','woothemes') .'</h3>' . "\n";
+       // paperplane
+        $content .= '<div class="container cf"><div class="row"><div class="grid_6">';
 
-		 				$_max_number_of_people = WTFactory::get_max_number_of_people();
+       $content .= '<div id="wootable-calendar-holder" class="grid_6"><h4>'. __('Select a Date','woothemes') .'</h4><div id="wootable-calendar"></div></div><!--/#wootable-calendar-holder-->' . "\n";
+       $content .= '<input type="hidden" name="reservation_date" id="reservation_date" class="input-reservation_date input-text required" value="' . $this->fields_for_form['reservation_date'] . '" />' . "\n";
+       $content .= '<input type="hidden" name="reservation_date_real" id="reservation_date_real" class="input-reservation_date_real input-text required" value="' . $reservation_date_real . '" />' . "\n";
 
-		 				$content .= '<p class="form-field">' . "\n";
-			 				$content .= '<span class="people"><label for="number_of_people">' . __( 'People', 'woothemes') . ':</label>' . "\n";
+       // paperplane
+        $content .= '</div><div class="grid_6">';
 
-			 				if ( $_max_number_of_people ) {
+       // Begin the bookings form.
+       $content .= '<div class="reservations-form grid_6">' . "\n";
+       $content .= '<h4>'. __('Your Information','woothemes') .'</h4>' . "\n";
 
-			 					$content .= '<select name="number_of_people" class="number_of_people required">' . "\n";
+       $_max_number_of_people = WTFactory::get_max_number_of_people();
 
-		 							$selected_number = $this->fields_for_form['number_of_people'];
+       $content .= '<p class="form-field cf people-time">' . "\n";
+        $content .= '<label for="number_of_people">' . __( 'People', 'woothemes') . ':</label>' . "\n";
 
-		 							for ( $i = 1; $i <= $_max_number_of_people; $i++ ) {
+        if ( $_max_number_of_people ) {
 
-		 								$_selected = '';
+         $content .= '<select name="number_of_people" class="number_of_people required">' . "\n";
 
-		 								if ( $i == $selected_number ) { $_selected = ' selected="selected"'; } // End IF Statement
+          $selected_number = $this->fields_for_form['number_of_people'];
 
-		 								$content .= '<option value="' . $i . '"' . $_selected . '>' . $i . '</option>' . "\n";
+          for ( $i = 3; $i <= $_max_number_of_people; $i++ ) {
 
-		 							} // End FOR Loop
+           $_selected = '';
 
-		 							// Allow for reservations of numbers greater than the maximum that a single table
-		 							// can handle, but e-mail the request to the restaurant instead of placing the
-		 							// reservation in the system.
+           if ( $i == $selected_number ) { $_selected = ' selected="selected"'; } // End IF Statement
 
-		 							$_selected = '';
+           $content .= '<option value="' . $i . '"' . $_selected . '>' . $i . '</option>' . "\n";
 
-		 							$_special_number = $_max_number_of_people+1;
+          } // End FOR Loop
 
-		 							if ( 'special' == $selected_number ) { $_selected = ' selected="selected"'; } // End IF Statement
+          // Allow for reservations of numbers greater than the maximum that a single table
+          // can handle, but e-mail the request to the restaurant instead of placing the
+          // reservation in the system.
 
-		 							$content .= '<option value="special"' . $_selected . '>' . $_special_number . '+' . '</option>' . "\n";
+          $_selected = '';
 
-		 						$content .= '</select></span>' . "\n";
+          $_special_number = $_max_number_of_people+1;
 
+          if ( 'special' == $selected_number ) { $_selected = ' selected="selected"'; } // End IF Statement
 
-			 				} else {
+          $content .= '<option value="special"' . $_selected . '>' . $_special_number . '+' . '</option>' . "\n";
 
-			 					$content .= __( 'No tables are currently listed. Please check back soon.', 'woothemes' );
+         $content .= '</select>' . "\n";
 
-			 				} // End IF Statement
 
-			 				$content .= '<span class="time"><label for="reservation_time">' . __( 'Time', 'woothemes' ) . ':</label>' . "\n";
+        } else {
 
-			 				$content .= WTFactory::display_changed_times( $this->plugin_prefix, false, $this->fields_for_form['reservation_time'], 0, $this->fields_for_form['reservation_date'], $_is_update );
+         $content .= __( 'No tables are currently listed. Please check back soon.', 'woothemes' );
 
-			 				/*
-			 				$business_hours = WTFactory::get_business_hours( $this->plugin_prefix );
+        } // End IF Statement
 
-			 				$index = strtolower( date('D', strtotime($reservation_date_real) ) );
+        $content .= '<label for="reservation_time" class="reservation-time-label">' . __( 'Time', 'woothemes' ) . ':</label>' . "\n";
 
-		 					// Compensate for the colloquial convention of "thurs" instead of "thu", and "tues" instead of "tue".
-		 					if ( $index == 'thu' ) { $index = 'thurs'; } // End IF Statement
-		 					if ( $index == 'tue' ) { $index = 'tues'; } // End IF Statement
+        $content .= WTFactory::display_changed_times( $this->plugin_prefix, false, $this->fields_for_form['reservation_time'], 0, $this->fields_for_form['reservation_date'], $_is_update );
 
-		 					$times = $business_hours[$index];
+        /*
+        $business_hours = WTFactory::get_business_hours( $this->plugin_prefix );
 
-			 				$times_array = WTFactory::get_times_between( $times['openingtime'], $times['closingtime'], $this->plugin_prefix, $reservation_date_real ); // 2010-11-01.
+        $index = strtolower( date('D', strtotime($reservation_date_real) ) );
 
-	 						if ( $times_array ) {
+        // Compensate for the colloquial convention of "thurs" instead of "thu", and "tues" instead of "tue".
+        if ( $index == 'thu' ) { $index = 'thurs'; } // End IF Statement
+        if ( $index == 'tue' ) { $index = 'tues'; } // End IF Statement
 
-		 						$content .= '<select name="reservation_time" class="reservation_time required">' . "\n";
+        $times = $business_hours[$index];
 
-		 							$selected_hour = $this->fields_for_form['reservation_time'];
+        $times_array = WTFactory::get_times_between( $times['openingtime'], $times['closingtime'], $this->plugin_prefix, $reservation_date_real ); // 2010-11-01.
 
-		 							foreach ( $times_array as $t ) {
+        if ( $times_array ) {
 
-		 								$_selected = '';
+         $content .= '<select name="reservation_time" class="reservation_time required">' . "\n";
 
-		 								if ( $t == $selected_hour ) { $_selected = ' selected="selected"'; } // End IF Statement
+          $selected_hour = $this->fields_for_form['reservation_time'];
 
-		 								$content .= '<option value="' . $t . '"' . $_selected . '>' . $t . '</option>' . "\n";
+          foreach ( $times_array as $t ) {
 
-		 							} // End FOREACH Loop
+           $_selected = '';
 
-		 						$content .= '</select></span>' . "\n";
+           if ( $t == $selected_hour ) { $_selected = ' selected="selected"'; } // End IF Statement
 
-	 						} // End IF Statement
-	 						*/
+           $content .= '<option value="' . $t . '"' . $_selected . '>' . $t . '</option>' . "\n";
 
-		 				$content .= '</p>' . "\n";
+          } // End FOREACH Loop
 
-		 				$content .= '<p class="form-field name">' . "\n";
-			 				$content .= '<label for="contact_name">' . __( 'Name', 'woothemes') . ':</label>' . "\n";
-			 				$content .= '<input type="text" name="contact_name" class="input-title input-text required" value="' . $this->fields_for_form['contact_name'] . '" />' . "\n";
-		 				$content .= '</p>' . "\n";
+         $content .= '</select></span>' . "\n";
 
-		 				$content .= '<p class="form-field">' . "\n";
-			 				$content .= '<span class="phone"><label for="contact_tel">' . __( 'Phone', 'woothemes') . ':</label>' . "\n";
-			 				$content .= '<input type="text" name="contact_tel" class="input-contact_tel input-text required" value="' . $this->fields_for_form['contact_tel'] . '" /></span>' . "\n";
+        } // End IF Statement
+        */
 
-		 				// Remember the user's e-mail address, if they have been here before and have not yet filled in the form.
-		 				$_email = $this->fields_for_form['contact_email'];
-		 				if ( ! $_email ) { $_email = WTFactory::get_saved_email(); } // End IF Statement
+       $content .= '</p>' . "\n";
 
-			 				$content .= '<span class="email"><label for="contact_email">' . __( 'Email', 'woothemes') . ':</label>' . "\n";
-			 				$content .= '<input type="text" name="contact_email" class="input-contact_email input-text required email" value="' . $_email . '" /></span>' . "\n";
-		 					// $content .= '<em>Inputting your e-mail address allows you to track your reservations online.</em>';
-		 				$content .= '</p>' . "\n";
+       $content .= '<p class="form-field name">' . "\n";
+        $content .= '<label for="contact_name">' . __( 'Name', 'woothemes') . ':</label>' . "\n";
+        $content .= '<input type="text" name="contact_name" class="input-title input-text required" value="' . $this->fields_for_form['contact_name'] . '" />' . "\n";
+       $content .= '</p>' . "\n";
 
-		 				$content .= '<p class="form-field notes">' . "\n";
-			 				$content .= '<label for="reservation_instructions">' . __( 'Notes', 'woothemes') . ':</label>' . "\n";
-			 				$content .= '<textarea name="reservation_instructions" class="textarea-reservation_instructions textarea">' . $this->fields_for_form['reservation_instructions'] . '</textarea>' . "\n";
-		 				$content .= '</p>' . "\n";
+       $content .= '<p class="form-field">' . "\n";
 
-		 				$_no_cookie = '';
-		 				if ( $this->fields_for_form['no_cookie'] ) {
+       // Remember the user's e-mail address, if they have been here before and have not yet filled in the form.
+       $_email = $this->fields_for_form['contact_email'];
+       if ( ! $_email ) { $_email = WTFactory::get_saved_email(); } // End IF Statement
 
-		 					$_no_cookie = ' checked="checked"';
+        $content .= '<span class="email"><label for="contact_email">' . __( 'Email', 'woothemes') . ':</label>' . "\n";
+        $content .= '<input type="text" name="contact_email" class="input-contact_email input-text required email" value="' . $_email . '" /></span>' . "\n";
+        // $content .= '<em>Inputting your e-mail address allows you to track your reservations online.</em>';
+       $content .= '</p>' . "\n";
 
-		 				} // End IF Statement
+       $content .= '<p class="form-field notes">' . "\n";
+        $content .= '<label for="reservation_instructions">' . __( 'Notes', 'woothemes') . ':</label>' . "\n";
+        $content .= '<textarea name="reservation_instructions" class="textarea-reservation_instructions" rows="5" textarea">' . $this->fields_for_form['reservation_instructions'] . '</textarea>' . "\n";
+       $content .= '</p>' . "\n";
 
-		 				$content .= '<p class="form-field submit">' . "\n";
-			 				$content .= '<label for="no_cookie">' . __( 'I\'m at a public computer', 'woothemes') . '</label>' . "\n";
-			 				$content .= '<input type="checkbox" name="no_cookie" class="input-no_cookie input-checkbox" value="1"' . $_no_cookie . ' />' . "\n";
-		 					// $content .= '<em>Inputting your e-mail address allows you to track your reservations online.</em>';
+       $_no_cookie = '';
+       if ( $this->fields_for_form['no_cookie'] ) {
 
-		 				// Generate a confirmation message based on the data entered on the form.
+        $_no_cookie = ' checked="checked"';
 
-						$_message = '';
+       } // End IF Statement
 
-						$_friendly_date = date_i18n( 'l, F jS', strtotime( $reservation_date_real ) );
+       $content .= '<p class="form-field submit">' . "\n";
 
-						$_friendly_time = ' at ';
+       // Generate a confirmation message based on the data entered on the form.
 
-						if ( $this->fields_for_form['reservation_time'] ) { $_friendly_time .= $this->fields_for_form['reservation_time']; }
-						else if ( is_array( $times_array ) ) { $_friendly_time .= $times_array[0]; } // End IF Statement
+      $_message = '';
 
-						$_friendly_number = '';
+      $_friendly_date = date_i18n( 'l, F jS', strtotime( $reservation_date_real ) );
 
-						if ( $this->fields_for_form['number_of_people'] ) { $_friendly_number = $this->fields_for_form['number_of_people']; }
-						else { $_friendly_number = 1; } // End IF Statement
+      $_friendly_time = ' at ';
 
-						$_message .= $_friendly_date . $_friendly_time . ' for a party of ' . $_friendly_number;
+      if ( $this->fields_for_form['reservation_time'] ) { $_friendly_time .= $this->fields_for_form['reservation_time']; }
+      else if ( is_array( $times_array ) ) { $_friendly_time .= $times_array[0]; } // End IF Statement
 
-						// $content .= '<p>' . __( 'Current reservation:', 'woothemes' ) . ' <span class="confirmation_message">' . $_message . '</span>.</p>';
+      $_friendly_number = '';
 
-		 				$content .= '<input type="hidden" name="confirmation_message" class="confirmation_message" value="' . $_message . '" />' . "\n";
+      if ( $this->fields_for_form['number_of_people'] ) { $_friendly_number = $this->fields_for_form['number_of_people']; }
+      else { $_friendly_number = 1; } // End IF Statement
 
-		 				if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'update' && isset( $_REQUEST['id'] ) && is_numeric( $_REQUEST['id'] ) ) {
+      $_message .= $_friendly_date . $_friendly_time . ' for a party of ' . $_friendly_number;
 
-				 			$content .= '<input type="hidden" name="is_updated" value="' . 'yes' . '" />' . "\n";
+      // $content .= '<p>' . __( 'Current reservation:', 'woothemes' ) . ' <span class="confirmation_message">' . $_message . '</span>.</p>';
 
-				 		} // End IF Statement
+       $content .= '<input type="hidden" name="confirmation_message" class="confirmation_message" value="' . $_message . '" />' . "\n";
 
-		 					if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'update' ) {
+       if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'update' && isset( $_REQUEST['id'] ) && is_numeric( $_REQUEST['id'] ) ) {
 
-		 						$_button_text = get_option( $this->plugin_prefix . 'view_button_text' );
+        $content .= '<input type="hidden" name="is_updated" value="' . 'yes' . '" />' . "\n";
 
-		 						if ( $_button_text == '' ) { $_button_text = __( 'View Reservations', 'woothemes' ); } // End IF Statement
+       } // End IF Statement
 
-		 						$manage_permalink = get_permalink( $this->manage_page );
+        if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'update' ) {
 
-		 						// Preserve e-mail and key if not in a stored cookie session.
-								if ( isset( $_GET['e-mail'] ) && isset( $_GET['key'] ) && md5( urldecode( $_GET['e-mail'] ) ) == $_GET['key'] ) {
-									$_email = urlencode( $_GET['e-mail'] );
-									$_key = urlencode( $_GET['key'] );
+         $_button_text = get_option( $this->plugin_prefix . 'view_button_text' );
 
-									$content .= '<input type="hidden" name="e-mail" value="' . esc_attr( $_email ) . '" />' . "\n";
-									$content .= '<input type="hidden" name="key" value="' . esc_attr( $_key ) . '" />' . "\n";
+         if ( $_button_text == '' ) { $_button_text = __( 'View Reservations', 'woothemes' ); } // End IF Statement
 
-									$manage_permalink = add_query_arg( 'key', $_key, add_query_arg( 'e-mail', $_email, $manage_permalink ) );
-								}
+         $manage_permalink = get_permalink( $this->manage_page );
 
-		 						$content .= '<a href="' . esc_url( $manage_permalink ) . '" class="button inactive">' . $_button_text . '</a>' . "\n";
+         // Preserve e-mail and key if not in a stored cookie session.
+        if ( isset( $_GET['e-mail'] ) && isset( $_GET['key'] ) && md5( urldecode( $_GET['e-mail'] ) ) == $_GET['key'] ) {
+         $_email = urlencode( $_GET['e-mail'] );
+         $_key = urlencode( $_GET['key'] );
 
-		 					} // End IF Statement
+         $content .= '<input type="hidden" name="e-mail" value="' . esc_attr( $_email ) . '" />' . "\n";
+         $content .= '<input type="hidden" name="key" value="' . esc_attr( $_key ) . '" />' . "\n";
 
-			 				$_button_text = get_option( $this->plugin_prefix . 'reserve_button_text' );
+         $manage_permalink = add_query_arg( 'key', $_key, add_query_arg( 'e-mail', $_email, $manage_permalink ) );
+        }
 
-		 					if ( $_button_text == '' ) { $_button_text = __( 'Reserve Table', 'woothemes' ); } // End IF Statement
+         $content .= '<a href="' . esc_url( $manage_permalink ) . '" class="button inactive">' . $_button_text . '</a>' . "\n";
 
-			 				$content .= '<input class="button button-submit" type="submit" value="' . $_button_text . '" />' . "\n";
-		 				$content .= '</p>' . "\n";
+        } // End IF Statement
 
-		 				$content .= '</div><!-- /#reservations-form -->' . "\n";
+        $_button_text = get_option( $this->plugin_prefix . 'reserve_button_text' );
 
-	 				$content .= '</form>' . "\n";
-	 				$content .= '<div class="modal-content">' . get_option( $this->plugin_prefix . 'confirmation_box_message' ) . '</div><!--/.modal-content-->' . "\n";
-	 			} // End IF Statement
+        if ( $_button_text == '' ) { $_button_text = __( 'Reserve Table', 'woothemes' ); } // End IF Statement
 
-	 		} // End IF Statement
+       $content .= '</p>' . "\n";
 
-	 		return $content;
+       $content .= '</div><!-- /#reservations-form -->' . "\n";
 
-	 	} // End filter_content()
+       // paperplane
+        $content .= '</div></div></div>';
 
-	 	/*----------------------------------------
-	 	  validate_booking()
-	 	  ----------------------------------------
+      $content .= '<p class="reserve-submit"><input class="button button-submit" type="submit" value="' . $_button_text . '" /></p>' . "\n";
 
-	 	  * Validates a single booking.
-	 	----------------------------------------*/
+      $content .= '</form>' . "\n";
+      $content .= '<div class="modal-content">' . get_option( $this->plugin_prefix . 'confirmation_box_message' ) . '</div><!--/.modal-content-->' . "\n";
+     } // End IF Statement
 
-	 	public function validate_booking () {
+    } // End IF Statement
 
-	 		$is_valid = false;
-	 		$business_hours = get_option( $this->plugin_prefix . 'business_hours' );
+    return $content;
 
-	 		// Check if the restaurant is closed on the selected date. If it is, don't bother with
-	 		// the other calculations.
+   } // End filter_content()
 
-	 		$attempted_date = $this->fields_for_form['reservation_date'];
-	 		$attempted_date_day = strtolower( date( "D", mktime(0, 0, 0, substr( $attempted_date, 5, 2 ), substr( $attempted_date, 8, 2 ), substr( $attempted_date, 0, 4 ) ) ) );
+   /*----------------------------------------
+     validate_booking()
+     ----------------------------------------
 
-	 		if ( is_array( $business_hours ) && array_key_exists( $attempted_date_day, $business_hours ) ) {
+     * Validates a single booking.
+   ----------------------------------------*/
 
-	 			if ( $business_hours[$attempted_date_day]['closed'] == 1 ) {
+   public function validate_booking () {
 
-	 				$this->errors[] = sprintf( __( 'Unfortunately, we are closed on %ss. Please select a different date.', 'woothemes' ), date( "l", mktime(0, 0, 0, substr( $attempted_date, 5, 2 ), substr( $attempted_date, 8, 2 ), substr( $attempted_date, 0, 4 ) ) ) );
+    $is_valid = false;
+    $business_hours = get_option( $this->plugin_prefix . 'business_hours' );
 
-	 				$is_valid = false;
+    // Check if the restaurant is closed on the selected date. If it is, don't bother with
+    // the other calculations.
 
-	 				return $is_valid;
+    $attempted_date = $this->fields_for_form['reservation_date'];
+    $attempted_date_day = strtolower( date( "D", mktime(0, 0, 0, substr( $attempted_date, 5, 2 ), substr( $attempted_date, 8, 2 ), substr( $attempted_date, 0, 4 ) ) ) );
 
-	 			} // End IF Statement
+    if ( is_array( $business_hours ) && array_key_exists( $attempted_date_day, $business_hours ) ) {
 
-	 		// Lets also run some checks to see if the restaurant is open at the time selected.
-	 		// You know, just to be safe and all.
+     if ( $business_hours[$attempted_date_day]['closed'] == 1 ) {
 
-	 		} // End IF Statement
+      $this->errors[] = sprintf( __( 'Unfortunately, we are closed on %ss. Please select a different date.', 'woothemes' ), date( "l", mktime(0, 0, 0, substr( $attempted_date, 5, 2 ), substr( $attempted_date, 8, 2 ), substr( $attempted_date, 0, 4 ) ) ) );
 
-	 		foreach ( $this->fields_detail as $field ) {
+      $is_valid = false;
 
-				if ( $field['required'] == 1 ) {
+      return $is_valid;
 
-					if ( !isset( $_POST[$field['field']] ) || $this->fields_for_form[$field['field']] == '' ) {
+     } // End IF Statement
 
-						$this->errors[] = $field['message'];
+    // Lets also run some checks to see if the restaurant is open at the time selected.
+    // You know, just to be safe and all.
 
-					} // End IF Statement
+    } // End IF Statement
 
-					if ( $field['type'] == 'email' && ! is_email( $this->fields_for_form[$field['field']] ) ) {
+    foreach ( $this->fields_detail as $field ) {
 
-						$this->errors[] = __( 'The email address provided is invalid. Please re-enter your email address.', 'woothemes' );
+    if ( $field['required'] == 1 ) {
 
-					} // End IF Statement
+     if ( !isset( $_POST[$field['field']] ) || $this->fields_for_form[$field['field']] == '' ) {
 
-					// Date field validation
-					if ( $field['type'] == 'date' ) {
+      $this->errors[] = $field['message'];
 
-						$is_valid_date = true;
+     } // End IF Statement
 
-						$date = trim( strip_tags( $this->fields_for_form[$field['field']] ) );
-						$date_bits = explode( '-', $date );
+     if ( $field['type'] == 'email' && ! is_email( $this->fields_for_form[$field['field']] ) ) {
 
-						$y = $date_bits[0];
-						$m = $date_bits[1];
-						$d = $date_bits[2];
+      $this->errors[] = __( 'The email address provided is invalid. Please re-enter your email address.', 'woothemes' );
 
-						if ( strlen( $y ) == 4 && strlen( $m ) == 2 && strlen( $d ) == 2 && $m <= 12 && $d <= 31 ) {
+     } // End IF Statement
 
-							$is_valid_date = true;
+     // Date field validation
+     if ( $field['type'] == 'date' ) {
 
-						} else {
+      $is_valid_date = true;
 
-							$is_valid_date = false;
+      $date = trim( strip_tags( $this->fields_for_form[$field['field']] ) );
+      $date_bits = explode( '-', $date );
 
-						} // End IF Statement
+      $y = $date_bits[0];
+      $m = $date_bits[1];
+      $d = $date_bits[2];
 
-						// A reservation cannot be made for the past. This isn't "Back to the Future", or something!
-						if ( $date < date('Y-m-d') ) {
+      if ( strlen( $y ) == 4 && strlen( $m ) == 2 && strlen( $d ) == 2 && $m <= 12 && $d <= 31 ) {
 
-							$this->errors[] = __( 'A reservation cannot be made for a date that has already been.', 'woothemes' );
-							$is_valid_date = false;
+       $is_valid_date = true;
 
-						} // End IF Statement
+      } else {
 
-						if ( ! $is_valid_date ) {
+       $is_valid_date = false;
 
-							$this->errors[] = __( 'Please enter a valid date in YYYY-MM-DD format.', 'woothemes' );
+      } // End IF Statement
 
-						} // End IF Statement
+      // A reservation cannot be made for the past. This isn't "Back to the Future", or something!
+      if ( $date < date('Y-m-d') ) {
 
-					} // End IF Statement
+       $this->errors[] = __( 'A reservation cannot be made for a date that has already been.', 'woothemes' );
+       $is_valid_date = false;
 
-					// Time field validation
-					if ( $field['type'] == 'time' ) {
+      } // End IF Statement
 
-						$is_valid_time = true;
+      if ( ! $is_valid_date ) {
 
-						$time = trim( strip_tags( $this->fields_for_form[$field['field']] ) );
-						$time_bits = explode( ':', $time );
+       $this->errors[] = __( 'Please enter a valid date in YYYY-MM-DD format.', 'woothemes' );
 
-						$h = $time_bits[0];
-						$m = $time_bits[1];
+      } // End IF Statement
 
-						if ( strlen( $h ) == 2 && strlen( $m ) == 2 && $h <= 23 && $m <= 59 ) {
+     } // End IF Statement
 
-							$is_valid_time = true;
+     // Time field validation
+     if ( $field['type'] == 'time' ) {
 
-						} else {
+      $is_valid_time = true;
 
-							$is_valid_time = false;
+      $time = trim( strip_tags( $this->fields_for_form[$field['field']] ) );
+      $time_bits = explode( ':', $time );
 
-						} // End IF Statement
+      $h = $time_bits[0];
+      $m = $time_bits[1];
 
-						if ( ! $is_valid_time ) {
+      if ( strlen( $h ) == 2 && strlen( $m ) == 2 && $h <= 23 && $m <= 59 ) {
 
-							$this->errors[] = __( 'Please specify a valid time in HH:MM format.', 'woothemes' );
+       $is_valid_time = true;
 
-						} // End IF Statement
+      } else {
 
-					} // End IF Statement
+       $is_valid_time = false;
 
-					// Int field validation
-					if ( $field['type'] == 'int' ) {
+      } // End IF Statement
 
-						if ( ! is_numeric( $this->fields_for_form[$field['field']] ) && $this->fields_for_form[$field['field']] != '' ) {
+      if ( ! $is_valid_time ) {
 
-							$field_label = ucfirst( str_replace( '_', ' ', $field['field'] ) );
+       $this->errors[] = __( 'Please specify a valid time in HH:MM format.', 'woothemes' );
 
-							$this->errors[] = __( 'Please enter a valid number for "' . $field_label . '".', 'woothemes' );
+      } // End IF Statement
 
-						} // End IF Statement
+     } // End IF Statement
 
-					} // End IF Statement
+     // Int field validation
+     if ( $field['type'] == 'int' ) {
 
-					// Number of people field validation
-					if ( $field['type'] == 'number_of_people' ) {
+      if ( ! is_numeric( $this->fields_for_form[$field['field']] ) && $this->fields_for_form[$field['field']] != '' ) {
 
-						if ( ! is_numeric( $this->fields_for_form[$field['field']] ) && $this->fields_for_form[$field['field']] != '' ) {
+       $field_label = ucfirst( str_replace( '_', ' ', $field['field'] ) );
 
-							if ( $this->fields_for_form[$field['field']] == 'special' ) {} else {
+       $this->errors[] = __( 'Please enter a valid number for "' . $field_label . '".', 'woothemes' );
 
-								$field_label = ucfirst( str_replace( '_', ' ', $field['field'] ) );
+      } // End IF Statement
 
-								$this->errors[] = __( 'Please select a valid number for "' . $field_label . '".', 'woothemes' );
+     } // End IF Statement
 
-							} // End IF Statement
+     // Number of people field validation
+     if ( $field['type'] == 'number_of_people' ) {
 
-						} // End IF Statement
+      if ( ! is_numeric( $this->fields_for_form[$field['field']] ) && $this->fields_for_form[$field['field']] != '' ) {
 
-					} // End IF Statement
+       if ( $this->fields_for_form[$field['field']] == 'special' ) {} else {
 
-				} // End IF Statement
+        $field_label = ucfirst( str_replace( '_', ' ', $field['field'] ) );
 
-			} // End FOREACH Loop
+        $this->errors[] = __( 'Please select a valid number for "' . $field_label . '".', 'woothemes' );
 
-	 		if ( count( $this->errors ) < 1 ) {
+       } // End IF Statement
 
-	 			$is_valid = true;
+      } // End IF Statement
 
-	 		} // End IF Statement
+     } // End IF Statement
 
-	 		return $is_valid;
+    } // End IF Statement
 
-	 	} // End validate_booking()
+   } // End FOREACH Loop
 
-	 	/*----------------------------------------
-	 	  process_booking()
-	 	  ----------------------------------------
+    if ( count( $this->errors ) < 1 ) {
 
-	 	  * Processes a single booking and assign
-	 	  * it to the best available table.
+     $is_valid = true;
 
-	 	  * Params:
-	 	  * - int $available_table
-	 	----------------------------------------*/
+    } // End IF Statement
 
-	 	public function process_booking ( $available_table ) {
+    return $is_valid;
 
-	 		// global $wootable;
+   } // End validate_booking()
 
-	 		$is_processed = false;
+   /*----------------------------------------
+     process_booking()
+     ----------------------------------------
 
-	 		// If the reservation is a `special` reservation,
-	 		// e-mail the restaurant administrator and the customer
-	 		// with notifications of the reservation instead
-	 		// of processing it in the system.
+     * Processes a single booking and assign
+     * it to the best available table.
 
-	 		if ( $this->fields_for_form['number_of_people'] == 'special' ) {
+     * Params:
+     * - int $available_table
+   ----------------------------------------*/
 
-	 			$_admin_message = '';
+   public function process_booking ( $available_table ) {
 
-	 			$_message_from_db = get_option( $this->plugin_prefix . 'adminemail_specialrequest' );
+    // global $wootable;
 
-	 			$_admin_message .= $_message_from_db;
+    $is_processed = false;
 
-	 			if ( $_admin_message == '' ) {
+    // If the reservation is a `special` reservation,
+    // e-mail the restaurant administrator and the customer
+    // with notifications of the reservation instead
+    // of processing it in the system.
 
-		 			$_admin_message .= 'Hey There!' . "\n";
-		 			$_admin_message .= '[contact_name] requested a reservation for [number_of_people] on [reservation_date] at [reservation_time].' . "\n";
-		 			$_admin_message .= 'The following notes were made:' . "\n\n";
-		 			$_admin_message .= '[reservation_instructions]' . "\n\n";
-		 			$_admin_message .= 'To discuss this reservation further, please follow up with [contact_name] either via telephone on [contact_tel] or e-mail on [contact_email].' . "\n";
-		 			$_admin_message .= 'Sincerely,' . "\n";
-		 			$_admin_message .= '[restaurant_name] Reservations.' . "\n";
+    if ( $this->fields_for_form['number_of_people'] == 'special' ) {
 
-	 			} // End IF Statement
+     $_admin_message = '';
 
-	 			// $_admin_message .= $wootable->default_emails['admin_specialrequest'];
+     $_message_from_db = get_option( $this->plugin_prefix . 'adminemail_specialrequest' );
 
-	 			$_admin_message = apply_filters( 'wootable_email_admin_message_special', $_admin_message );
+     $_admin_message .= $_message_from_db;
 
-	 			$_customer_message = '';
+     if ( $_admin_message == '' ) {
 
-	 			$_message_from_db = get_option( $this->plugin_prefix . 'email_specialrequest' );
+      $_admin_message .= 'Hey There!' . "\n";
+      $_admin_message .= '[contact_name] requested a reservation for [number_of_people] on [reservation_date] at [reservation_time].' . "\n";
+      $_admin_message .= 'The following notes were made:' . "\n\n";
+      $_admin_message .= '[reservation_instructions]' . "\n\n";
+      $_admin_message .= 'To discuss this reservation further, please follow up with [contact_name] either via telephone on [contact_tel] or e-mail on [contact_email].' . "\n";
+      $_admin_message .= 'Sincerely,' . "\n";
+      $_admin_message .= '[restaurant_name] Reservations.' . "\n";
 
-	 			$_customer_message .= $_message_from_db;
+     } // End IF Statement
 
-	 			if ( $_customer_message == '' ) {
+     // $_admin_message .= $wootable->default_emails['admin_specialrequest'];
 
-		 			$_customer_message .= 'Dear [contact_name],' . "\n";
-		 			$_customer_message .= 'You recently requested a reservation at [restaurant_name] for [number_of_people] on [reservation_date] at [reservation_time].' . "\n";
-		 			$_customer_message .= 'The following notes were left for the manager:' . "\n\n";
-		 			$_customer_message .= '[reservation_instructions]' . "\n\n";
-		 			$_customer_message .= 'To discuss this reservation further, a manager at [restaurant_name] will follow up with you either via telephone (you left [contact_tel] as your contact number) or e-mail (on [contact_email]).' . "\n";
-		 			$_customer_message .= 'Sincerely,' . "\n";
-		 			$_customer_message .= '[restaurant_name] Reservations.' . "\n";
+     $_admin_message = apply_filters( 'wootable_email_admin_message_special', $_admin_message );
 
-		 		} // End IF Statement
+     $_customer_message = '';
 
-	 			// $_customer_message .= $wootable->default_emails['specialrequest'];
+     $_message_from_db = get_option( $this->plugin_prefix . 'email_specialrequest' );
 
-	 			$_customer_message = apply_filters( 'wootable_email_customer_message_special', $_customer_message );
+     $_customer_message .= $_message_from_db;
 
-	 			$this->send_admin_email( $_admin_message );
-	 			$this->send_customer_email( $this->fields_for_form['contact_email'], $_customer_message );
+     if ( $_customer_message == '' ) {
 
-	 			$is_processed = true;
+      $_customer_message .= 'Dear [contact_name],' . "\n";
+      $_customer_message .= 'You recently requested a reservation at [restaurant_name] for [number_of_people] on [reservation_date] at [reservation_time].' . "\n";
+      $_customer_message .= 'The following notes were left for the manager:' . "\n\n";
+      $_customer_message .= '[reservation_instructions]' . "\n\n";
+      $_customer_message .= 'To discuss this reservation further, a manager at [restaurant_name] will follow up with you either via telephone (you left [contact_tel] as your contact number) or e-mail (on [contact_email]).' . "\n";
+      $_customer_message .= 'Sincerely,' . "\n";
+      $_customer_message .= '[restaurant_name] Reservations.' . "\n";
 
-	 			return $is_processed;
+     } // End IF Statement
 
-	 		} // End IF Statement
+     // $_customer_message .= $wootable->default_emails['specialrequest'];
 
-	 		if ( ! $available_table ) { return $is_processed; } // End IF Statement // ORIGINAL PLACEMENT - 2010-11-04.
+     $_customer_message = apply_filters( 'wootable_email_customer_message_special', $_customer_message );
 
-	 		// Prepare data for insertion into the database.
-	 		$reservation_data = array(
-	 									'post_title' => $this->fields_for_form['contact_name'],
-	 									'post_type' => 'reservation',
-	 									'post_status' => 'publish'
-	 								);
+     $this->send_admin_email( $_admin_message );
+     $this->send_customer_email( $this->fields_for_form['contact_email'], $_customer_message );
 
-	 		// UPDATE AN EXISTING BOOKING - 2010-11-04.
+     $is_processed = true;
 
-	 		if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'update' && isset( $_REQUEST['id'] ) && is_numeric( $_REQUEST['id'] ) ) {
+     return $is_processed;
 
-	 			$_id = (int) $_REQUEST['id'];
+    } // End IF Statement
 
-	 			$_existing_data = get_post( $_id );
+    if ( ! $available_table ) { return $is_processed; } // End IF Statement // ORIGINAL PLACEMENT - 2010-11-04.
 
-	 			if ( $_existing_data ) {
+    // Prepare data for insertion into the database.
+    $reservation_data = array(
+           'post_title' => $this->fields_for_form['contact_name'],
+           'post_type' => 'reservation',
+           'post_status' => 'publish'
+          );
 
-	 				$_new_data = array( 'ID' => $_id );
+    // UPDATE AN EXISTING BOOKING - 2010-11-04.
 
-	 				$_update_info = array_merge( $_new_data, $reservation_data );
+    if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'update' && isset( $_REQUEST['id'] ) && is_numeric( $_REQUEST['id'] ) ) {
 
-	 				$reservation = wp_update_post( $_update_info );
+     $_id = (int) $_REQUEST['id'];
 
-	 				// Unassign the tables currently assigned to this reservation.
+     $_existing_data = get_post( $_id );
 
-	 				wp_delete_object_term_relationships( $_id, 'tables' );
+     if ( $_existing_data ) {
 
-	 			} // End IF Statement
+      $_new_data = array( 'ID' => $_id );
 
-	 		} else {
+      $_update_info = array_merge( $_new_data, $reservation_data );
 
-	 			$reservation = wp_insert_post( $reservation_data );
+      $reservation = wp_update_post( $_update_info );
 
-	 		} // End IF Statement
+      // Unassign the tables currently assigned to this reservation.
 
-	 		if ( is_numeric( $reservation ) ) {
+      wp_delete_object_term_relationships( $_id, 'tables' );
 
-	 			$meta_fields = array( 'reservation_date', 'reservation_time', 'reservation_instructions', 'number_of_people', 'contact_name', 'contact_tel', 'contact_email', 'reservation_status' );
+     } // End IF Statement
 
-	 			// Set the reservation status to `confirmed` by default.
-	 			$_defaultstatus = get_option( $this->plugin_prefix . 'default_status' );
+    } else {
 
-	 			// Whitelist check on status options. Set to `unconfirmed` if it doesn't pass the test.
+     $reservation = wp_insert_post( $reservation_data );
 
-	 			if ( ! in_array( $_defaultstatus, array( 'confirmed', 'unconfirmed' ) ) ) { $_defaultstatus = 'unconfirmed'; } // End IF Statement
+    } // End IF Statement
 
+    if ( is_numeric( $reservation ) ) {
 
-	 			$this->fields_for_form['reservation_status'] = $_defaultstatus; // 'unconfirmed'
+     $meta_fields = array( 'reservation_date', 'reservation_time', 'reservation_instructions', 'number_of_people', 'contact_name', 'contact_tel', 'contact_email', 'reservation_status' );
 
-	 			foreach ( $meta_fields as $m ) {
+     // Set the reservation status to `confirmed` by default.
+     $_defaultstatus = get_option( $this->plugin_prefix . 'default_status' );
 
-	 				if ( $this->fields_for_form[$m] ) { update_post_meta( $reservation, $m, $this->fields_for_form[$m] ); } // End IF Statement
+     // Whitelist check on status options. Set to `unconfirmed` if it doesn't pass the test.
 
-	 			} // End FOREACH Loop
+     if ( ! in_array( $_defaultstatus, array( 'confirmed', 'unconfirmed' ) ) ) { $_defaultstatus = 'unconfirmed'; } // End IF Statement
 
-	 			// Assign the reservation to it's selected table.
-	 			$assign_to_tables = wp_set_object_terms( $reservation, array( (int) $available_table ), 'tables', false );
 
-	 		} // End IF Statement
+     $this->fields_for_form['reservation_status'] = $_defaultstatus; // 'unconfirmed'
 
-	 		$is_processed = true;
+     foreach ( $meta_fields as $m ) {
 
-	 		// Assign the new reservation to the best available table.
+      if ( $this->fields_for_form[$m] ) { update_post_meta( $reservation, $m, $this->fields_for_form[$m] ); } // End IF Statement
 
-	 		return $is_processed;
+     } // End FOREACH Loop
 
-	 	} // End process_booking()
+     // Assign the reservation to it's selected table.
+     $assign_to_tables = wp_set_object_terms( $reservation, array( (int) $available_table ), 'tables', false );
 
-	 	/*----------------------------------------
-	 	  send_customer_email()
-	 	  ----------------------------------------
+    } // End IF Statement
 
-	 	  * A wrapper function for send_email()
-	 	  * that e-mails the booking confirmation
-	 	  * to the customer.
+    $is_processed = true;
 
-	 	  * Params:
-	 	  * - String $to
-	 	----------------------------------------*/
+    // Assign the new reservation to the best available table.
 
-	 	public function send_customer_email ( $to, $message = '' ) {
+    return $is_processed;
 
-	 		global $wootable;
+   } // End process_booking()
 
-	 		$date_format = '';
+   /*----------------------------------------
+     send_customer_email()
+     ----------------------------------------
 
-			$date_format = get_option( $this->plugin_prefix . 'date_format' );
+     * A wrapper function for send_email()
+     * that e-mails the booking confirmation
+     * to the customer.
 
-			if ( $date_format == '' ) { $date_format = 'jS F Y'; } // End IF Statement
+     * Params:
+     * - String $to
+   ----------------------------------------*/
 
-			$_reservation_date_timestamp = strtotime( $this->fields_for_form['reservation_date'] );
-			$_reservation_date = date_i18n( $date_format, $_reservation_date_timestamp );
+   public function send_customer_email ( $to, $message = '' ) {
 
-	 		$_codes = array(
-	 						'[restaurant_name]' => get_option('blogname'),
-	 						'[number_of_people]' => $this->fields_for_form['number_of_people'],
-	 						'[reservation_time]' => $this->fields_for_form['reservation_time'],
-	 						'[reservation_date]' => $_reservation_date,
-	 						'[reservation_instructions]' => $this->fields_for_form['reservation_instructions'],
-	 						'[contact_name]' => $this->fields_for_form['contact_name'],
-	 						'[contact_tel]' => $this->fields_for_form['contact_tel'],
-	 						'[contact_email]' => $this->fields_for_form['contact_email']
-	 					);
+    global $wootable;
 
-	 		// Change time to display in 12 hour format, if set to do so.
-			$time_format = get_option( $this->plugin_prefix . 'time_format' );
+    $date_format = '';
 
-			if ( $time_format == '12' ) {
-				$_codes['[reservation_time]'] = date( 'h:ia', strtotime( $this->fields_for_form['reservation_time'] ) );
-			}
+   $date_format = get_option( $this->plugin_prefix . 'date_format' );
 
-	 		$subject = '[' . get_option('blogname') . ']: Booking request';
+   if ( $date_format == '' ) { $date_format = 'jS F Y'; } // End IF Statement
 
-	 		$subject = apply_filters('wootable_email_customer_subject', $subject);
+   $_reservation_date_timestamp = strtotime( $this->fields_for_form['reservation_date'] );
+   $_reservation_date = date_i18n( $date_format, $_reservation_date_timestamp );
 
-	 		if ( ! $message ) {
+    $_codes = array(
+        '[restaurant_name]' => get_option('blogname'),
+        '[number_of_people]' => $this->fields_for_form['number_of_people'],
+        '[reservation_time]' => $this->fields_for_form['reservation_time'],
+        '[reservation_date]' => $_reservation_date,
+        '[reservation_instructions]' => $this->fields_for_form['reservation_instructions'],
+        '[contact_name]' => $this->fields_for_form['contact_name'],
+        '[contact_tel]' => $this->fields_for_form['contact_tel'],
+        '[contact_email]' => $this->fields_for_form['contact_email']
+       );
 
-		 		// Check what the default reservation status is.
-		 		$_defaultstatus = get_option( $this->plugin_prefix . 'default_status' );
+    // Change time to display in 12 hour format, if set to do so.
+   $time_format = get_option( $this->plugin_prefix . 'time_format' );
 
-	 			$message = '';
+   if ( $time_format == '12' ) {
+    $_codes['[reservation_time]'] = date( 'h:ia', strtotime( $this->fields_for_form['reservation_time'] ) );
+   }
 
-	 			switch ( $_defaultstatus ) {
+    $subject = '[' . get_option('blogname') . ']: Booking request';
 
-	 				case 'confirmed':
+    $subject = apply_filters('wootable_email_customer_subject', $subject);
 
-	 					$message = get_option( $this->plugin_prefix . 'email_thankyou' );
-	 					$default = $wootable->default_emails['thankyou'];
+    if ( ! $message ) {
 
-	 				break;
+     // Check what the default reservation status is.
+     $_defaultstatus = get_option( $this->plugin_prefix . 'default_status' );
 
-	 				case 'unconfirmed':
+     $message = '';
 
-	 					$message = get_option( $this->plugin_prefix . 'email_pleaseconfirm' );
-	 					$default = $wootable->default_emails['pleaseconfirm'];
+     switch ( $_defaultstatus ) {
 
-	 				break;
+      case 'confirmed':
 
-	 			} // End SWITCH Statement
+       $message = get_option( $this->plugin_prefix . 'email_thankyou' );
+       $default = $wootable->default_emails['thankyou'];
 
-	 		} // End IF Statement
+      break;
 
-	 		// If no custom message is present, use the default.
+      case 'unconfirmed':
 
-	 		if ( $message == '' ) {
+       $message = get_option( $this->plugin_prefix . 'email_pleaseconfirm' );
+       $default = $wootable->default_emails['pleaseconfirm'];
 
-	 			/*
-		 		$message = '';
-		 		$message .= 'Dear [contact_name],' . "\n\n";
-		 		$message .= 'Thank you for your reservation at [restaurant_name] for [number_of_people] at [reservation_time] on [reservation_date].' . "\n";
-		 		$message .= 'To manage your reservations, please visit our reservation management page at the URL below.' . "\n";
-		 		$message .= 'We look forward to your patronage.' . "\n\n";
-		 		$message .= 'Sincerely,' . "\n";
-		 		$message .= 'The staff at [restaurant_name].' . "\n";
-		 		*/
+      break;
 
-		 		$message = $default;
+     } // End SWITCH Statement
 
-		 	} // End IF Statement
+    } // End IF Statement
 
-		 		// Let the user customise the message via a filter.
-		 		$message = apply_filters( 'wootable_email_customer_message', $message );
+    // If no custom message is present, use the default.
 
-		 		$message = stripslashes( $message );
+    if ( $message == '' ) {
 
-		 		$_manager_url = '';
-		 		$_manager_id = get_option( $this->plugin_prefix . 'page_manage' );
+     /*
+     $message = '';
+     $message .= 'Dear [contact_name],' . "\n\n";
+     $message .= 'Thank you for your reservation at [restaurant_name] for [number_of_people] at [reservation_time] on [reservation_date].' . "\n";
+     $message .= 'To manage your reservations, please visit our reservation management page at the URL below.' . "\n";
+     $message .= 'We look forward to your patronage.' . "\n\n";
+     $message .= 'Sincerely,' . "\n";
+     $message .= 'The staff at [restaurant_name].' . "\n";
+     */
 
-		 		if ( $_manager_id ) { $_manager_url = get_permalink( $_manager_id ); } // End IF Statement
+     $message = $default;
 
-		 		if ( $_manager_url ) {
+    } // End IF Statement
 
-		 			// Change the character used to concatenate the custom query variables,
-			 		// depending on whether the user has pretty permalinks on or not.
+     // Let the user customise the message via a filter.
+     $message = apply_filters( 'wootable_email_customer_message', $message );
 
-			 		$_concatenator = '&';
+     $message = stripslashes( $message );
 
-			 		$_permalink_structure = get_option( 'permalink_structure' );
+     $_manager_url = '';
+     $_manager_id = get_option( $this->plugin_prefix . 'page_manage' );
 
-			 		if ( $_permalink_structure != '' ) { $_concatenator = '?'; } // End IF Statement
+     if ( $_manager_id ) { $_manager_url = get_permalink( $_manager_id ); } // End IF Statement
 
+     if ( $_manager_url ) {
 
-		 			$message .= "\n\n" . apply_filters( 'wootable_manage_reservations_email_text', 'Manage your reservations here: ' ) . $_manager_url . $_concatenator . 'e-mail=' . urlencode($this->fields_for_form['contact_email']) . '&key=' . md5($this->fields_for_form['contact_email']) . "\n\n";
+      // Change the character used to concatenate the custom query variables,
+      // depending on whether the user has pretty permalinks on or not.
 
-		 		} // End IF Statement
+      $_concatenator = '&';
 
-		 		// Let the user customise the message via a filter.
-		 		// $message = apply_filters('wootable_email_customer_message', $message);
+      $_permalink_structure = get_option( 'permalink_structure' );
 
-	 		// } // End IF Statement
+      if ( $_permalink_structure != '' ) { $_concatenator = '?'; } // End IF Statement
 
-	 		// In "special" cases, replace the word "special" with the maximum number and a "+" sign.
-	 		$_max_number_of_people = WTFactory::get_max_number_of_people()+1 . '+';
 
-	 		if ( $this->fields_for_form['number_of_people'] == 'special' ) {
+      $message .= "\n\n" . apply_filters( 'wootable_manage_reservations_email_text', 'Manage your reservations here: ' ) . $_manager_url . $_concatenator . 'e-mail=' . urlencode($this->fields_for_form['contact_email']) . '&key=' . md5($this->fields_for_form['contact_email']) . "\n\n";
 
-	 			$message = str_replace( '[number_of_people]', $_max_number_of_people, $message );
+     } // End IF Statement
 
-	 		} // End IF Statement
+     // Let the user customise the message via a filter.
+     // $message = apply_filters('wootable_email_customer_message', $message);
 
-	 		// "Parse" shortcodes.
-	 		foreach ( $_codes as $_k => $_v ) {
+    // } // End IF Statement
 
-	 			$message = str_replace( $_k, $_v, $message );
+    // In "special" cases, replace the word "special" with the maximum number and a "+" sign.
+    $_max_number_of_people = WTFactory::get_max_number_of_people()+1 . '+';
 
-	 		} // End FOREACH Loop
+    if ( $this->fields_for_form['number_of_people'] == 'special' ) {
 
-	 		$headers = 'From: ' . get_option('blogname') . ' Reservations <' . get_option('admin_email') . '>' . "\r\n\\";
+     $message = str_replace( '[number_of_people]', $_max_number_of_people, $message );
 
-	 		// If the option to CC the restaurant on all reservation e-mails is checked,
-	 		// BCC  the restaurant on this e-mail.
+    } // End IF Statement
 
-	 		if ( get_option( $this->plugin_prefix . 'send_confirmation_to_restaurant' ) ) {
+    // "Parse" shortcodes.
+    foreach ( $_codes as $_k => $_v ) {
 
-	 			$headers .= 'Bcc: ' . get_option('blogname') . ' Reservations <' . get_option('admin_email') . '>' . "\r\n\\";
+     $message = str_replace( $_k, $_v, $message );
 
-	 		} // End IF Statement
+    } // End FOREACH Loop
 
-	 		return wp_mail( $to, $subject, $message, $headers );
-	 		// Used imap_mail() as the wp_mail() and mail() functions were returning `false`.
+    $headers = 'From: ' . get_option('blogname') . ' Reservations <' . get_option('admin_email') . '>' . "\r\n\\";
 
-	 	} // End send_customer_email()
+    // If the option to CC the restaurant on all reservation e-mails is checked,
+    // BCC  the restaurant on this e-mail.
 
-	 	/*----------------------------------------
-	 	  send_admin_email()
-	 	  ----------------------------------------
+    if ( get_option( $this->plugin_prefix . 'send_confirmation_to_restaurant' ) ) {
 
-	 	  * A wrapper function for send_email()
-	 	  * that e-mails the booking confirmation
-	 	  * to the administrator.
-	 	----------------------------------------*/
+     $headers .= 'Bcc: ' . get_option('blogname') . ' Reservations <' . get_option('admin_email') . '>' . "\r\n\\";
 
-	 	public function send_admin_email ( $message = '' ) {
+    } // End IF Statement
 
-			$date_format = '';
+    return wp_mail( $to, $subject, $message, $headers );
+    // Used imap_mail() as the wp_mail() and mail() functions were returning `false`.
 
-			$date_format = get_option( $this->plugin_prefix . 'date_format' );
+   } // End send_customer_email()
 
-			if ( $date_format == '' ) { $date_format = 'jS F Y'; } // End IF Statement
+   /*----------------------------------------
+     send_admin_email()
+     ----------------------------------------
 
-			$_reservation_date_timestamp = strtotime( $this->fields_for_form['reservation_date'] );
-			$_reservation_date = date_i18n( $date_format, $_reservation_date_timestamp );
+     * A wrapper function for send_email()
+     * that e-mails the booking confirmation
+     * to the administrator.
+   ----------------------------------------*/
 
-	 		$_codes = array(
-	 						'[restaurant_name]' => get_option('blogname'),
-	 						'[number_of_people]' => $this->fields_for_form['number_of_people'],
-	 						'[reservation_time]' => $this->fields_for_form['reservation_time'],
-	 						'[reservation_date]' => $_reservation_date,
-	 						'[reservation_instructions]' => $this->fields_for_form['reservation_instructions'],
-	 						'[contact_name]' => $this->fields_for_form['contact_name'],
-	 						'[contact_tel]' => $this->fields_for_form['contact_tel'],
-	 						'[contact_email]' => $this->fields_for_form['contact_email']
-	 					);
+   public function send_admin_email ( $message = '' ) {
 
-			// Change time to display in 12 hour format, if set to do so.
-			$time_format = get_option( $this->plugin_prefix . 'time_format' );
+   $date_format = '';
 
-			if ( $time_format == '12' ) {
-				$_codes['[reservation_time]'] = date( 'h:ia', strtotime( $this->fields_for_form['reservation_time'] ) );
-			}
+   $date_format = get_option( $this->plugin_prefix . 'date_format' );
 
-	 		$to = get_option('admin_email');
+   if ( $date_format == '' ) { $date_format = 'jS F Y'; } // End IF Statement
 
-	 		$subject = '[' . get_option('blogname') . ']: Booking request for ' . $this->fields_for_form['contact_name'] . '.';
+   $_reservation_date_timestamp = strtotime( $this->fields_for_form['reservation_date'] );
+   $_reservation_date = date_i18n( $date_format, $_reservation_date_timestamp );
 
-	 		$subject = apply_filters('wootable_email_admin_subject', $subject);
+    $_codes = array(
+        '[restaurant_name]' => get_option('blogname'),
+        '[number_of_people]' => $this->fields_for_form['number_of_people'],
+        '[reservation_time]' => $this->fields_for_form['reservation_time'],
+        '[reservation_date]' => $_reservation_date,
+        '[reservation_instructions]' => $this->fields_for_form['reservation_instructions'],
+        '[contact_name]' => $this->fields_for_form['contact_name'],
+        '[contact_tel]' => $this->fields_for_form['contact_tel'],
+        '[contact_email]' => $this->fields_for_form['contact_email']
+       );
 
-	 		$message = get_option( $this->plugin_prefix . 'adminemail_reservationmade' );
-	 		$default = $wootable->default_emails['admin_reservationmade'];
+   // Change time to display in 12 hour format, if set to do so.
+   $time_format = get_option( $this->plugin_prefix . 'time_format' );
 
+   if ( $time_format == '12' ) {
+    $_codes['[reservation_time]'] = date( 'h:ia', strtotime( $this->fields_for_form['reservation_time'] ) );
+   }
 
-	 		if ( $message == '' ) {
+    $to = get_option('admin_email');
 
-		 		// $message = '';
+    $subject = '[' . get_option('blogname') . ']: Booking request for ' . $this->fields_for_form['contact_name'] . '.';
 
-		 		/*
+    $subject = apply_filters('wootable_email_admin_subject', $subject);
 
-		 		$message .= 'Hey there!' . "\n\n";
-		 		$message .= 'A reservation has been made at [restaurant_name] for [number_of_people], to be seated at [reservation_time] on [reservation_date].' . "\n";
-		 		$message .= 'The reservee, [contact_name], can be contacted at:' . "\n";
-		 		$message .= 'Telephone: [contact_tel]' . "\n";
-		 		$message .= 'E-mail: [contact_email]' . "\n";
-		 		$message .= "\n" . '[reservation_instructions]' . "\n\n";
-		 		$message .= 'Please contact [contact_name] at your earliest convenience to confirm their reservation.' . "\n\n";
-		 		$message .= 'Sincerely,' . "\n";
-		 		$message .= '[restaurant_name] Reservations.' . "\n";
+    $message = get_option( $this->plugin_prefix . 'adminemail_reservationmade' );
+    $default = $wootable->default_emails['admin_reservationmade'];
 
-		 		*/
 
-		 		$message = $default;
+    if ( $message == '' ) {
 
-	 		} // End IF Statement
+     // $message = '';
 
-			// Let the user customise the message via a filter.
-		 	$message = apply_filters('wootable_email_admin_message', $message);
+     /*
 
-		 	$message = stripslashes( $message );
+     $message .= 'Hey there!' . "\n\n";
+     $message .= 'A reservation has been made at [restaurant_name] for [number_of_people], to be seated at [reservation_time] on [reservation_date].' . "\n";
+     $message .= 'The reservee, [contact_name], can be contacted at:' . "\n";
+     $message .= 'Telephone: [contact_tel]' . "\n";
+     $message .= 'E-mail: [contact_email]' . "\n";
+     $message .= "\n" . '[reservation_instructions]' . "\n\n";
+     $message .= 'Please contact [contact_name] at your earliest convenience to confirm their reservation.' . "\n\n";
+     $message .= 'Sincerely,' . "\n";
+     $message .= '[restaurant_name] Reservations.' . "\n";
 
-	 		// In "special" cases, replace the word "special" with the maximum number and a "+" sign.
-	 		$_max_number_of_people = WTFactory::get_max_number_of_people()+1 . '+';
+     */
 
-	 		if ( $this->fields_for_form['number_of_people'] == 'special' ) {
+     $message = $default;
 
-	 			$message = str_replace( '[number_of_people]', $_max_number_of_people, $message );
+    } // End IF Statement
 
-	 		} // End IF Statement
+   // Let the user customise the message via a filter.
+    $message = apply_filters('wootable_email_admin_message', $message);
 
-	 		// "Parse" shortcodes.
-	 		foreach ( $_codes as $_k => $_v ) {
+    $message = stripslashes( $message );
 
-	 			if ( $_k == '[reservation_instructions]' && $_v == '' ) {
+    // In "special" cases, replace the word "special" with the maximum number and a "+" sign.
+    $_max_number_of_people = WTFactory::get_max_number_of_people()+1 . '+';
 
-	 				$message = str_replace( $_k, '', $message );
+    if ( $this->fields_for_form['number_of_people'] == 'special' ) {
 
-	 			} else {
+     $message = str_replace( '[number_of_people]', $_max_number_of_people, $message );
 
-	 				$message = str_replace( $_k, $_v, $message );
+    } // End IF Statement
 
-	 			} // End IF Statement
+    // "Parse" shortcodes.
+    foreach ( $_codes as $_k => $_v ) {
 
-	 		} // End FOREACH Loop
+     if ( $_k == '[reservation_instructions]' && $_v == '' ) {
 
-	 		$headers = 'From: ' . get_option('blogname') . ' Reservations <' . get_option('admin_email') . '>' . "\r\n\\";
+      $message = str_replace( $_k, '', $message );
 
-	 		return wp_mail( $to, $subject, $message, $headers );
-	 		// Used imap_mail() as the wp_mail() and mail() functions were returning `false`.
+     } else {
 
-	 	} // End send_admin_email()
+      $message = str_replace( $_k, $_v, $message );
 
-	 	/*----------------------------------------
-	 	  send_statuschange_email()
-	 	  ----------------------------------------
+     } // End IF Statement
 
-	 	  * Sends an e-mail to either the customer
-	 	  * or administrator, notifying them of a
-	 	  * status change.
+    } // End FOREACH Loop
 
-	 	  * Params:
-	 	  * - String $type
-	 	  * - Int $id
+    $headers = 'From: ' . get_option('blogname') . ' Reservations <' . get_option('admin_email') . '>' . "\r\n\\";
 
-	 	  * Globals:
-	 	  * - wootable
-	 	----------------------------------------*/
+    return wp_mail( $to, $subject, $message, $headers );
+    // Used imap_mail() as the wp_mail() and mail() functions were returning `false`.
 
-	 	public function send_statuschange_email ( $type, $id ) {
+   } // End send_admin_email()
 
-	 		global $wootable;
+   /*----------------------------------------
+     send_statuschange_email()
+     ----------------------------------------
 
-	 		// Check that the $type given is valid.
+     * Sends an e-mail to either the customer
+     * or administrator, notifying them of a
+     * status change.
 
-	 		if ( in_array( $type, array( 'user', 'admin' ) ) && is_numeric( $id ) ) {
+     * Params:
+     * - String $type
+     * - Int $id
 
-	 			// Check that the id passed is in the database.
+     * Globals:
+     * - wootable
+   ----------------------------------------*/
 
-	 			$post = get_post( $id );
+   public function send_statuschange_email ( $type, $id ) {
 
-	 			if ( $post ) {
+    global $wootable;
 
-	 				// Check if the post_type is valid for our context.
+    // Check that the $type given is valid.
 
-	 				if ( $post->post_type == $wootable->post_type->token ) {
+    if ( in_array( $type, array( 'user', 'admin' ) ) && is_numeric( $id ) ) {
 
-	 					// Setup the various shortcodes for parsing.
+     // Check that the id passed is in the database.
 
-	 					$_postmeta = get_post_custom( $id );
+     $post = get_post( $id );
 
-	 					$date_format = '';
+     if ( $post ) {
 
-						$date_format = get_option( $this->plugin_prefix . 'date_format' );
+      // Check if the post_type is valid for our context.
 
-						if ( $date_format == '' ) { $date_format = 'jS F Y'; } // End IF Statement
+      if ( $post->post_type == $wootable->post_type->token ) {
 
-						$_reservation_date_timestamp = strtotime( $_postmeta['reservation_date'][0] );
-						$_reservation_date = date_i18n( $date_format, $_reservation_date_timestamp );
+       // Setup the various shortcodes for parsing.
 
-	 					$_codes = array(
-	 						'[restaurant_name]' => get_option('blogname'),
-	 						'[number_of_people]' => $_postmeta['number_of_people'][0],
-	 						'[reservation_time]' => $_postmeta['reservation_time'][0],
-	 						'[reservation_date]' => $_reservation_date,
-	 						'[reservation_instructions]' => $_postmeta['reservation_instructions'][0],
-	 						'[contact_name]' => $_postmeta['contact_name'][0],
-	 						'[contact_tel]' => $_postmeta['contact_tel'][0],
-	 						'[contact_email]' => $_postmeta['contact_email'][0],
-	 						'[reservation_status]' => ucfirst( $_postmeta['reservation_status'][0] )
-	 					);
+       $_postmeta = get_post_custom( $id );
 
-						// Change time to display in 12 hour format, if set to do so.
-	 					$time_format = get_option( $this->plugin_prefix . 'time_format' );
+       $date_format = '';
 
-						if ( $time_format == '12' ) {
-							$_codes['[reservation_time]'] = date( 'h:ia', strtotime( $_postmeta['reservation_time'][0] ) );
-						}
+      $date_format = get_option( $this->plugin_prefix . 'date_format' );
 
-	 					// Get the status message from the database.
+      if ( $date_format == '' ) { $date_format = 'jS F Y'; } // End IF Statement
 
-	 					// Setup the message for sending.
+      $_reservation_date_timestamp = strtotime( $_postmeta['reservation_date'][0] );
+      $_reservation_date = date_i18n( $date_format, $_reservation_date_timestamp );
 
-	 					$subject = '[' . get_option('blogname') . ']: Reservation # ' . $post->ID . ': Status of reservation for ' . $_postmeta['contact_name'][0] . ' has changed.';
+       $_codes = array(
+        '[restaurant_name]' => get_option('blogname'),
+        '[number_of_people]' => $_postmeta['number_of_people'][0],
+        '[reservation_time]' => $_postmeta['reservation_time'][0],
+        '[reservation_date]' => $_reservation_date,
+        '[reservation_instructions]' => $_postmeta['reservation_instructions'][0],
+        '[contact_name]' => $_postmeta['contact_name'][0],
+        '[contact_tel]' => $_postmeta['contact_tel'][0],
+        '[contact_email]' => $_postmeta['contact_email'][0],
+        '[reservation_status]' => ucfirst( $_postmeta['reservation_status'][0] )
+       );
 
-				 		$subject = apply_filters('wootable_email_statuschange_subject', $subject);
+      // Change time to display in 12 hour format, if set to do so.
+       $time_format = get_option( $this->plugin_prefix . 'time_format' );
 
-				 		switch ( $type ) {
+      if ( $time_format == '12' ) {
+       $_codes['[reservation_time]'] = date( 'h:ia', strtotime( $_postmeta['reservation_time'][0] ) );
+      }
 
-				 			case 'user':
+       // Get the status message from the database.
 
-				 			$to = '';
+       // Setup the message for sending.
 
-				 			if ( is_email( $_postmeta['contact_email'][0] ) ) {
+       $subject = '[' . get_option('blogname') . ']: Reservation # ' . $post->ID . ': Status of reservation for ' . $_postmeta['contact_name'][0] . ' has changed.';
 
-				 				$to = $_postmeta['contact_email'][0];
+       $subject = apply_filters('wootable_email_statuschange_subject', $subject);
 
-				 			} // End IF Statement
+       switch ( $type ) {
 
-				 			$message = get_option( $this->plugin_prefix . 'email_statuschange' );
-				 			$default = $wootable->default_emails['statuschange'];
+        case 'user':
 
-				 			break;
+        $to = '';
 
-				 			case 'admin':
+        if ( is_email( $_postmeta['contact_email'][0] ) ) {
 
-				 			$admin_email = get_option('admin_email');
+         $to = $_postmeta['contact_email'][0];
 
-				 			$to = '';
+        } // End IF Statement
 
-				 			if ( is_email( $admin_email ) ) {
+        $message = get_option( $this->plugin_prefix . 'email_statuschange' );
+        $default = $wootable->default_emails['statuschange'];
 
-				 				$to = $admin_email;
+        break;
 
-				 			} // End IF Statement
+        case 'admin':
 
-				 			$message = get_option( $this->plugin_prefix . 'adminemail_statuschange' );
-				 			$default = $wootable->default_emails['admin_statuschange'];
+        $admin_email = get_option('admin_email');
 
-				 			break;
+        $to = '';
 
-				 		} // End SWITCH Statement
+        if ( is_email( $admin_email ) ) {
 
+         $to = $admin_email;
 
-				 		if ( $message == '' ) {
+        } // End IF Statement
 
-					 		$message = $default;
+        $message = get_option( $this->plugin_prefix . 'adminemail_statuschange' );
+        $default = $wootable->default_emails['admin_statuschange'];
 
-				 		} // End IF Statement
+        break;
 
-				 		// Let the user customise the message via a filter.
-					 	$message = apply_filters('wootable_email_statuschange', $message);
+       } // End SWITCH Statement
 
-				 		// "Parse" shortcodes.
 
-				 		foreach ( $_codes as $_k => $_v ) {
+       if ( $message == '' ) {
 
-				 			if ( $_k == '[reservation_instructions]' && $_v == '' ) {
+        $message = $default;
 
-				 				$message = str_replace( $_k, '', $message );
+       } // End IF Statement
 
-				 			} else {
+       // Let the user customise the message via a filter.
+       $message = apply_filters('wootable_email_statuschange', $message);
 
-				 				$message = str_replace( $_k, $_v, $message );
+       // "Parse" shortcodes.
 
-				 			} // End IF Statement
+       foreach ( $_codes as $_k => $_v ) {
 
-				 		} // End FOREACH Loop
+        if ( $_k == '[reservation_instructions]' && $_v == '' ) {
 
-				 		$message = stripslashes( $message );
+         $message = str_replace( $_k, '', $message );
 
-				 		$headers = 'From: ' . get_option('blogname') . ' Reservations <' . get_option('admin_email') . '>' . "\r\n\\";
+        } else {
 
-				 		return wp_mail( $to, $subject, $message, $headers );
-				 		// Used imap_mail() as the wp_mail() and mail() functions were returning `false`.
+         $message = str_replace( $_k, $_v, $message );
 
+        } // End IF Statement
 
-	 				} // End IF Statement
+       } // End FOREACH Loop
 
-	 			} // End IF Statement
+       $message = stripslashes( $message );
 
-	 		} // End IF Statement
+       $headers = 'From: ' . get_option('blogname') . ' Reservations <' . get_option('admin_email') . '>' . "\r\n\\";
 
-	 	} // End send_statuschange_email()
+       return wp_mail( $to, $subject, $message, $headers );
+       // Used imap_mail() as the wp_mail() and mail() functions were returning `false`.
 
-	 	/*----------------------------------------
-	 	  send_email()
-	 	  ----------------------------------------
 
-	 	  * Sends e-mails... does what it says on
-	 	  * the tin.
-	 	----------------------------------------*/
+      } // End IF Statement
 
-	 	public function send_email () {
+     } // End IF Statement
 
-	 		// TO DO
+    } // End IF Statement
 
-	 	} // End send_email()
+   } // End send_statuschange_email()
 
-	 	/*----------------------------------------
-	 	  display_message()
-	 	  ----------------------------------------
+   /*----------------------------------------
+     send_email()
+     ----------------------------------------
 
-	 	  * Displays a message to the user after
-	 	  * their booking has been e-mailed through.
+     * Sends e-mails... does what it says on
+     * the tin.
+   ----------------------------------------*/
 
-	 	  * Params:
-	 	  * - Boolean $status
-	 	----------------------------------------*/
+   public function send_email () {
 
-	 	public function display_message () {
+    // TO DO
 
-	 		// TO DO
+   } // End send_email()
 
-	 		$content = '';
+   /*----------------------------------------
+     display_message()
+     ----------------------------------------
 
-	 		if ( count( $this->errors ) ) {
+     * Displays a message to the user after
+     * their booking has been e-mailed through.
 
-	 			$content = $this->display_error_messages();
-	 			//$content = '<p class="woo-sc-box note">Please fill out the form below to complete your booking</p>';
+     * Params:
+     * - Boolean $status
+   ----------------------------------------*/
 
-	 		} // End IF Statement
+   public function display_message () {
 
-	 		if ( $this->message && ! $this->errors ) {
+    // TO DO
 
-	 			$content = $this->message;
+    $content = '';
 
-	 		} // End IF Statement
+    if ( count( $this->errors ) ) {
 
-	 		return $content;
+     $content = $this->display_error_messages();
+     //$content = '<p class="woo-sc-box note">Please fill out the form below to complete your booking</p>';
 
-	 	} // End display_message()
+    } // End IF Statement
 
-	 	/*----------------------------------------
-	 	  display_specialrequest_message()
-	 	  ----------------------------------------
+    if ( $this->message && ! $this->errors ) {
 
-	 	  * The message to display if the booking
-	 	  * has been added successfully and is a
-	 	  * special request.
-	 	----------------------------------------*/
+     $content = $this->message;
 
-	 	public function display_specialrequest_message () {
+    } // End IF Statement
 
-	 		// TO DO
+    return $content;
 
-	 		// $content = __( 'Your reservation has been submitted successfully. As this is a special request, our management has been informed of your request and will contact you timeously to confirm the finer details.', 'woothemes' );
+   } // End display_message()
 
-	 		$content = '<p class="woo-sc-box tick">'.__( 'Your reservation has been submitted successfully. As this is a special request, our management has been informed of your request and will contact you timeously to confirm the finer details.', 'woothemes' ).'</p>';
+   /*----------------------------------------
+     display_specialrequest_message()
+     ----------------------------------------
 
-	 		$content = apply_filters( 'wootable_specialrequest_message', $content );
+     * The message to display if the booking
+     * has been added successfully and is a
+     * special request.
+   ----------------------------------------*/
 
-	 		return $content;
+   public function display_specialrequest_message () {
 
-	 	} // End display_specialrequest_message()
+    // TO DO
 
-	 	/*----------------------------------------
-	 	  display_success_message()
-	 	  ----------------------------------------
+    // $content = __( 'Your reservation has been submitted successfully. As this is a special request, our management has been informed of your request and will contact you timeously to confirm the finer details.', 'woothemes' );
 
-	 	  * The message to display if the booking
-	 	  * has been added successfully.
-	 	----------------------------------------*/
+    $content = '<p class="woo-sc-box tick">'.__( 'Your reservation has been submitted successfully. As this is a special request, our management has been informed of your request and will contact you timeously to confirm the finer details.', 'woothemes' ).'</p>';
 
-	 	public function display_success_message () {
+    $content = apply_filters( 'wootable_specialrequest_message', $content );
 
-	 		// TO DO
+    return $content;
 
-	 		//$content = __( 'Your reservation has been booked successfully. You\'ll receive an email confirming this with a link should you wish to cancel your booking.', 'woothemes' );
+   } // End display_specialrequest_message()
 
-	 		if ( $_REQUEST['is_updated'] == 'yes' ) {
+   /*----------------------------------------
+     display_success_message()
+     ----------------------------------------
 
-	 			$content = '<p class="woo-sc-box tick">'.__( 'Your reservation has been updated successfully. You\'ll receive an email confirming this with a link should you wish to cancel your booking.', 'woothemes' ).'</p>';
+     * The message to display if the booking
+     * has been added successfully.
+   ----------------------------------------*/
 
-	 		} else {
+   public function display_success_message () {
 
-	 			$content = '<p class="woo-sc-box tick">'.__( 'Your reservation has been booked successfully. You\'ll receive an email confirming this with a link should you wish to cancel your booking.', 'woothemes' ).'</p>';
+    // TO DO
 
-	 		} // End IF Statement
+    //$content = __( 'Your reservation has been booked successfully. You\'ll receive an email confirming this with a link should you wish to cancel your booking.', 'woothemes' );
 
-	 		$content = apply_filters( 'wootable_success_message', $content );
+    if ( $_REQUEST['is_updated'] == 'yes' ) {
 
-	 		return $content;
+     $content = '<p class="woo-sc-box tick">'.__( 'Your reservation has been updated successfully. You\'ll receive an email confirming this with a link should you wish to cancel your booking.', 'woothemes' ).'</p>';
 
-	 	} // End display_success_message()
+    } else {
 
-	 	/*----------------------------------------
-	 	  display_fail_message()
-	 	  ----------------------------------------
+     $content = '<p class="woo-sc-box tick">'.__( 'Your reservation has been booked successfully. You\'ll receive an email confirming this with a link should you wish to cancel your booking.', 'woothemes' ).'&nbsp;<a href="/">Go back to the main site</a></p>';
 
-	 	  * The message to display if the booking
-	 	  * has not been added successfully.
-	 	----------------------------------------*/
+    } // End IF Statement
 
-	 	public function display_fail_message () {
+    $content = apply_filters( 'wootable_success_message', $content );
 
-	 		// TO DO
+    return $content;
 
-	 		$content = __( 'An issue was encountered while attempting to place your reservation.', 'woothemes' );
+   } // End display_success_message()
 
-	 		$content = apply_filters( 'wootable_fail_message', $content );
+   /*----------------------------------------
+     display_fail_message()
+     ----------------------------------------
 
-	 		return $content;
+     * The message to display if the booking
+     * has not been added successfully.
+   ----------------------------------------*/
 
-	 	} // End display_fail_message()
+   public function display_fail_message () {
 
-	 	/*----------------------------------------
-	 	  display_error_messages()
-	 	  ----------------------------------------
+    // TO DO
 
-	 	  * Displays error messages, if any are
-	 	  * present in the $errors array.
-	 	----------------------------------------*/
+    $content = __( 'An issue was encountered while attempting to place your reservation.', 'woothemes' );
 
-	 	public function display_error_messages () {
+    $content = apply_filters( 'wootable_fail_message', $content );
 
-	 		// TO DO
+    return $content;
 
-	 		$content = '';
+   } // End display_fail_message()
 
-	 		if ( $this->errors ) {
+   /*----------------------------------------
+     display_error_messages()
+     ----------------------------------------
 
-				//$content .= '<div class="error fade"><p>' . __( 'Please correct the following', 'woothemes' ) . ':</p>' . "\n";
-				$content = '<p class="woo-sc-box alert">'.__( 'Please correct the following', 'woothemes' ).'</p>';
+     * Displays error messages, if any are
+     * present in the $errors array.
+   ----------------------------------------*/
 
-					//$content .= '<ul class="messages">' . "\n";
+   public function display_error_messages () {
 
-					foreach ( $this->errors as $e ) {
+    // TO DO
 
-						$content .= '<p class="woo-sc-box alert">'.__( $e, 'woothemes' ).'</p>' . "\n";
+    $content = '';
 
-					} // End FOREACH Loop
+    if ( $this->errors ) {
 
-					//$content .= '</ul>' . "\n";
+    //$content .= '<div class="error fade"><p>' . __( 'Please correct the following', 'woothemes' ) . ':</p>' . "\n";
+    $content = '<p class="woo-sc-box alert">'.__( 'Please correct the following', 'woothemes' ).'</p>';
 
-				//$content .= '</div><!--/.error fade-->' . "\n";
+     //$content .= '<ul class="messages">' . "\n";
 
-			} // End IF Statement
+     foreach ( $this->errors as $e ) {
 
-	 		return $content;
+      $content .= '<p class="woo-sc-box alert">'.__( $e, 'woothemes' ).'</p>' . "\n";
 
-	 	} // End display_error_messages()
+     } // End FOREACH Loop
 
-	 	/*----------------------------------------
-	 	  form_processing()
-	 	  ----------------------------------------
+     //$content .= '</ul>' . "\n";
 
-	 	  * Wrapper for validating and processing
-	 	  * the form on the bookings page.
-	 	----------------------------------------*/
+    //$content .= '</div><!--/.error fade-->' . "\n";
 
-	 	public function form_processing () {
+   } // End IF Statement
 
-	 		// TO DO
+    return $content;
 
-	 		if ( is_page( $this->bookings_page ) ) {
+   } // End display_error_messages()
 
-	 			// If the form has been submitted...
-	 			if ( $_POST && $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+   /*----------------------------------------
+     form_processing()
+     ----------------------------------------
 
-	 				// Setup variables for working with the form data.
-	 				$this->fields_detail = $this->get_form_fields();
+     * Wrapper for validating and processing
+     * the form on the bookings page.
+   ----------------------------------------*/
 
-	 				$this->create_empty_variables();
-					$this->create_post_variables();
+   public function form_processing () {
 
-	 				// Check that the user has filled in all necessary fields,
-	 				// and that the data is valid.
-	 				$is_valid = $this->validate_booking();
+    // TO DO
 
-	 				// If the data is valid, check if any table are available.
-	 				if ( $is_valid ) {
+    if ( is_page( $this->bookings_page ) ) {
 
-	 					$number_of_people = $this->fields_for_form['number_of_people'];
-	 					$time = $this->fields_for_form['reservation_time'];
-	 					$date = $this->fields_for_form['reservation_date'];
+     // If the form has been submitted...
+     if ( $_POST && $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 
-	 					if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'update' && isset( $_REQUEST['id'] ) && is_numeric( $_REQUEST['id'] ) ) {
+      // Setup variables for working with the form data.
+      $this->fields_detail = $this->get_form_fields();
 
-				 			$_id = (int) $_REQUEST['id'];
+      $this->create_empty_variables();
+     $this->create_post_variables();
 
-				 			// Get the current tables assigned and store them for later.
-				 			$current_tables = wp_get_object_terms( $_id, 'tables' );
+      // Check that the user has filled in all necessary fields,
+      // and that the data is valid.
+      $is_valid = $this->validate_booking();
 
-				 			$current_table_ids = array();
+      // If the data is valid, check if any table are available.
+      if ( $is_valid ) {
 
-				 			if ( count( $current_tables ) ) {
+       $number_of_people = $this->fields_for_form['number_of_people'];
+       $time = $this->fields_for_form['reservation_time'];
+       $date = $this->fields_for_form['reservation_date'];
 
-				 				foreach ( $current_tables as $ct ) {
+       if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'update' && isset( $_REQUEST['id'] ) && is_numeric( $_REQUEST['id'] ) ) {
 
-				 					$current_table_ids[] = $ct->term_id;
+        $_id = (int) $_REQUEST['id'];
 
-				 				} // End FOREACH Loop
+        // Get the current tables assigned and store them for later.
+        $current_tables = wp_get_object_terms( $_id, 'tables' );
 
-				 			} // End IF Statement
+        $current_table_ids = array();
 
-				 			// Unassign the tables currently assigned to this reservation.
-	 						// wp_delete_object_term_relationships( $_id, 'tables' );
+        if ( count( $current_tables ) ) {
 
-				 		} // End IF Statement
+         foreach ( $current_tables as $ct ) {
 
-	 					$available_table = $this->get_table_to_seat( $number_of_people, $time, $date, $current_table_ids, $_id );
+          $current_table_ids[] = $ct->term_id;
 
-	 					if ( $this->fields_for_form['number_of_people'] == 'special' ) {
+         } // End FOREACH Loop
 
-	 						$available_table = 'special';
+        } // End IF Statement
 
-	 					} // End IF Statement
+        // Unassign the tables currently assigned to this reservation.
+        // wp_delete_object_term_relationships( $_id, 'tables' );
 
-	 					// UPDATE RESERVATION - 2010-11-04.
+       } // End IF Statement
 
-	 					// If running an update and no tables are available, reset the tables.
-	 					/*
-	 					if ( ! $available_table && $_REQUEST['action'] == 'update' ) {
+       $available_table = $this->get_table_to_seat( $number_of_people, $time, $date, $current_table_ids, $_id );
 
-	 						wp_set_object_terms( $_id, array( $available_table ), 'tables', false );
+       if ( $this->fields_for_form['number_of_people'] == 'special' ) {
 
-	 					} // End IF Statement
-	 					*/
-	 					// If a table is available, make the reservation.
-	 					if ( $available_table ) {
+        $available_table = 'special';
 
-	 						$is_processed = $this->process_booking( $available_table );
+       } // End IF Statement
 
-	 						// If the reservation is processed successfully,
-	 						// display a message and send necessary e-mails.
-	 						if ( $is_processed ) {
+       // UPDATE RESERVATION - 2010-11-04.
 
-	 							if ( $this->fields_for_form['number_of_people'] == 'special' ) {
+       // If running an update and no tables are available, reset the tables.
+       /*
+       if ( ! $available_table && $_REQUEST['action'] == 'update' ) {
 
-	 								$this->message = $this->display_specialrequest_message();
+        wp_set_object_terms( $_id, array( $available_table ), 'tables', false );
 
-	 							} else {
+       } // End IF Statement
+       */
+       // If a table is available, make the reservation.
+       if ( $available_table ) {
 
-	 								$this->message = $this->display_success_message();
+        $is_processed = $this->process_booking( $available_table );
 
-	 							} // End IF Statement
+        // If the reservation is processed successfully,
+        // display a message and send necessary e-mails.
+        if ( $is_processed ) {
 
-	 							// Don't send "thank you" or "notification" e-mails if the booking
-	 							// is a special request (ie: not in the system).
-	 							if ( $this->fields_for_form['number_of_people'] == 'special' ) {} else {
+         if ( $this->fields_for_form['number_of_people'] == 'special' ) {
 
-		 							// Send e-mails to the administrator and the customer.
-		 							$_email_sent = $this->send_admin_email();
-		 							$_customer_email_sent = $this->send_customer_email( $this->fields_for_form['contact_email'] );
+          $this->message = $this->display_specialrequest_message();
 
-	 							} // End IF Statement
+         } else {
 
-	 							// If the user is at a public computer, don't set the cookie.
-	 							if ( $this->fields_for_form['no_cookie'] ) {} else {
+          $this->message = $this->display_success_message();
 
-		 							// Set the $_COOKIE so we can remember the user.
-		 							$_cookie_token = WTFactory::get_cookie_token();
+         } // End IF Statement
 
-		 							$_domain = str_replace( 'http://', '', get_bloginfo('url') );
-		 							$_domain_bits = explode( '/', $_domain );
-		 							$_domain = str_replace( 'www', '', $_domain_bits[0] );
+         // Don't send "thank you" or "notification" e-mails if the booking
+         // is a special request (ie: not in the system).
+         if ( $this->fields_for_form['number_of_people'] == 'special' ) {} else {
 
-		 							setcookie( 'wootable_' . $_cookie_token . '_email', $this->fields_for_form['contact_email'], time()+60*60*24*365, COOKIEPATH, false );
-									$_COOKIE['wootable_' . $_cookie_token . '_email'] = $this->fields_for_form['contact_email'];
+          // Send e-mails to the administrator and the customer.
+          $_email_sent = $this->send_admin_email();
+          $_customer_email_sent = $this->send_customer_email( $this->fields_for_form['contact_email'] );
 
-	 							} // End IF Statement
+         } // End IF Statement
 
-	 						// Otherwise, display a failure message.
-	 						} else {
+         // If the user is at a public computer, don't set the cookie.
+         if ( $this->fields_for_form['no_cookie'] ) {} else {
 
-	 							$this->message = $this->display_fail_message();
+          // Set the $_COOKIE so we can remember the user.
+          $_cookie_token = WTFactory::get_cookie_token();
 
-	 						} // End IF Statement
+          $_domain = str_replace( 'http://', '', get_bloginfo('url') );
+          $_domain_bits = explode( '/', $_domain );
+          $_domain = str_replace( 'www', '', $_domain_bits[0] );
 
-	 					// Otherwise, add an error message to $this->errors.
-	 					} else {
+          setcookie( 'wootable_' . $_cookie_token . '_email', $this->fields_for_form['contact_email'], time()+60*60*24*365, COOKIEPATH, false );
+         $_COOKIE['wootable_' . $_cookie_token . '_email'] = $this->fields_for_form['contact_email'];
 
-	 						$this->errors[] = apply_filters( 'wootable_msg_no_table', __( 'There are no tables available at the requested time and date for your sized party. Please try again.', 'woothemes' ) );
+         } // End IF Statement
 
-	 					} // End IF Statement
+        // Otherwise, display a failure message.
+        } else {
 
-	 				} // End IF Statement
+         $this->message = $this->display_fail_message();
 
-	 			} // End IF Statement
+        } // End IF Statement
 
+       // Otherwise, add an error message to $this->errors.
+       } else {
 
-	 		} // End IF Statement
+        $this->errors[] = apply_filters( 'wootable_msg_no_table', __( 'There are no tables available at the requested time and date for your sized party. Please try again.', 'woothemes' ) );
 
+       } // End IF Statement
 
-	 	} // End form_processing()
+      } // End IF Statement
 
-	 	/*----------------------------------------
-	 	  ajax_functions()
-	 	  ----------------------------------------
+     } // End IF Statement
 
-	 	  * A switch to perform specific actions
-	 	  * pertaining to various AJAX calls.
-	 	----------------------------------------*/
 
-	 	public function ajax_functions () {
+    } // End IF Statement
 
-	 		switch ( $_POST['ajax-action'] ) {
 
-	 			// Get the times available on a particular day.
-	 			case 'get_times':
+   } // End form_processing()
 
-	 				WTFactory::display_changed_times( $this->plugin_prefix, true, $_POST['time'], $_POST['page_id'], $_POST['date'], $_POST['is_admin'] );
+   /*----------------------------------------
+     ajax_functions()
+     ----------------------------------------
 
-	 			break;
+     * A switch to perform specific actions
+     * pertaining to various AJAX calls.
+   ----------------------------------------*/
 
-	 			// Generate a confirmation message for the main reservation form.
-	 			case 'generate_confirmation_message':
+   public function ajax_functions () {
 
-	 				$_message = '';
+    switch ( $_POST['ajax-action'] ) {
 
-					if ( strlen( $_POST['time'] ) > 8 ) { echo $_message; } else {
+     // Get the times available on a particular day.
+     case 'get_times':
 
-						$_friendly_date = date_i18n( 'l, F jS', strtotime( $_POST['date'] ) );
+      WTFactory::display_changed_times( $this->plugin_prefix, true, $_POST['time'], $_POST['page_id'], $_POST['date'], $_POST['is_admin'] );
 
-						$_friendly_time = '';
+     break;
 
-						if ( $_POST['time'] ) {
-							$_friendly_time = __( ' at ', 'woothemes' );
+     // Generate a confirmation message for the main reservation form.
+     case 'generate_confirmation_message':
 
-							$time_format = get_option( $this->plugin_prefix . 'time_format' );
+      $_message = '';
 
-							if ( $time_format == '24' ) {
-								$_friendly_time .= $_POST['time'];
-							} else {
-								$_friendly_time .= date( 'h:ia', strtotime( $_POST['time'] ) );
-							}
-						} // End IF Statement
+     if ( strlen( $_POST['time'] ) > 8 ) { echo $_message; } else {
 
-						$_friendly_number = '';
+      $_friendly_date = date_i18n( 'l, F jS', strtotime( $_POST['date'] ) );
 
-						if ( $_POST['people'] == 'special' ) {
-							$_friendly_number = WTFactory::get_max_number_of_people() + 1;
-							$_friendly_number .= '+';
-						} else {
-							$_friendly_number = $_POST['people'];
-						} // End IF Statement
+      $_friendly_time = '';
 
-						// $_message .= '<span class="confirmation_message">' . $_friendly_date . $_friendly_time . ' for a party of ' . $_friendly_number . '</span>';
+      if ( $_POST['time'] ) {
+       $_friendly_time = __( ' at ', 'woothemes' );
 
-	 					$_message = '<input type="hidden" name="confirmation_message" class="confirmation_message" value="' . sprintf( __( '%s for a party of %s', 'woothemes' ), $_friendly_date . $_friendly_time, $_friendly_number ) . '" />' . "\n";
+       $time_format = get_option( $this->plugin_prefix . 'time_format' );
 
-	 					echo $_message;
+       if ( $time_format == '24' ) {
+        $_friendly_time .= $_POST['time'];
+       } else {
+        $_friendly_time .= date( 'h:ia', strtotime( $_POST['time'] ) );
+       }
+      } // End IF Statement
 
-					} // End IF Statement
+      $_friendly_number = '';
 
-	 			break;
+      if ( $_POST['people'] == 'special' ) {
+       $_friendly_number = WTFactory::get_max_number_of_people() + 1;
+       $_friendly_number .= '+';
+      } else {
+       $_friendly_number = $_POST['people'];
+      } // End IF Statement
 
-	 			// Generate a confirmation message for the "Make a reservation" widget.
-	 			case 'generate_confirmation_message_widget':
+      // $_message .= '<span class="confirmation_message">' . $_friendly_date . $_friendly_time . ' for a party of ' . $_friendly_number . '</span>';
 
-	 				$_message = '';
+       $_message = '<input type="hidden" name="confirmation_message" class="confirmation_message" value="' . sprintf( __( '%s for a party of %s', 'woothemes' ), $_friendly_date . $_friendly_time, $_friendly_number ) . '" />' . "\n";
 
-					if ( strlen( $_POST['time'] ) > 8 ) { echo $_message; } else {
+       echo $_message;
 
-						$_days = array(
-							'sun' => __( 'Sunday','woothemes' ),
-							'mon' => __( 'Monday', 'woothemes' ),
-							'tue' => __( 'Tuesday', 'woothemes' ),
-							'wed' => __( 'Wednesday', 'woothemes' ),
-							'thu' => __( 'Thursday', 'woothemes' ),
-							'fri' => __( 'Friday', 'woothemes' ),
-							'sat' => __( 'Saturday', 'woothemes' )
-						);
+     } // End IF Statement
 
-						// Get the various business hours.
-						$business_hours = WTFactory::get_business_hours( $this->plugin_prefix );
+     break;
 
-						$index = strtolower( date('D', strtotime($_POST['date']) ) );
+     // Generate a confirmation message for the "Make a reservation" widget.
+     case 'generate_confirmation_message_widget':
 
-						// $full_dayname = date('l', strtotime($_POST['date']) );
-						$full_dayname = $_days[$index];
+      $_message = '';
 
-						// Compensate for the colloquial convention of "thurs" instead of "thu", and "tues" instead of "tue".
-						if ( $index == 'thu' ) { $index = 'thurs'; } // End IF Statement
-						if ( $index == 'tue' ) { $index = 'tues'; } // End IF Statement
+     if ( strlen( $_POST['time'] ) > 8 ) { echo $_message; } else {
 
-						$times = $business_hours[$index];
+      $_days = array(
+       'sun' => __( 'Sunday','woothemes' ),
+       'mon' => __( 'Monday', 'woothemes' ),
+       'tue' => __( 'Tuesday', 'woothemes' ),
+       'wed' => __( 'Wednesday', 'woothemes' ),
+       'thu' => __( 'Thursday', 'woothemes' ),
+       'fri' => __( 'Friday', 'woothemes' ),
+       'sat' => __( 'Saturday', 'woothemes' )
+      );
 
-						if ( $times['closed'] ) {
+      // Get the various business hours.
+      $business_hours = WTFactory::get_business_hours( $this->plugin_prefix );
 
-							$_message = '<span class="confirmation_message">' . sprintf( __( 'We are unfortunately closed on %ss.', 'woothemes' ), $full_dayname ) . '<input type="hidden" name="reservation_time" class="required" value="" /></span>' . "\n";
+      $index = strtolower( date('D', strtotime($_POST['date']) ) );
 
-						} else {
+      // $full_dayname = date('l', strtotime($_POST['date']) );
+      $full_dayname = $_days[$index];
 
-							$_friendly_date = date_i18n( 'l, F jS', strtotime( $_POST['date'] ) );
+      // Compensate for the colloquial convention of "thurs" instead of "thu", and "tues" instead of "tue".
+      if ( $index == 'thu' ) { $index = 'thurs'; } // End IF Statement
+      if ( $index == 'tue' ) { $index = 'tues'; } // End IF Statement
 
-							$_friendly_time = '';
+      $times = $business_hours[$index];
 
-							if ( $_POST['time'] ) {
-								$_friendly_time = ' at ';
+      if ( $times['closed'] ) {
 
-								$time_format = get_option( $this->plugin_prefix . 'time_format' );
+       $_message = '<span class="confirmation_message">' . sprintf( __( 'We are unfortunately closed on %ss.', 'woothemes' ), $full_dayname ) . '<input type="hidden" name="reservation_time" class="required" value="" /></span>' . "\n";
 
-								if ( $time_format == '24' ) {
-									$_friendly_time .= $_POST['time'];
-								} else {
-									$_friendly_time .= date( 'h:ia', strtotime( $_POST['time'] ) );
-								}
-							} // End IF Statement
+      } else {
 
+       $_friendly_date = date_i18n( 'l, F jS', strtotime( $_POST['date'] ) );
 
-							$_friendly_number = '';
+       $_friendly_time = '';
 
-							if ( $_POST['people'] == 'special' ) {
+       if ( $_POST['time'] ) {
+        $_friendly_time = ' at ';
 
-								$_friendly_number = WTFactory::get_max_number_of_people() + 1;
-								$_friendly_number .= '+';
+        $time_format = get_option( $this->plugin_prefix . 'time_format' );
 
-							} else {
+        if ( $time_format == '24' ) {
+         $_friendly_time .= $_POST['time'];
+        } else {
+         $_friendly_time .= date( 'h:ia', strtotime( $_POST['time'] ) );
+        }
+       } // End IF Statement
 
-								$_friendly_number = $_POST['people'];
 
-							} // End IF Statement
+       $_friendly_number = '';
 
-							$_message .= '<span class="confirmation_message">' . sprintf( __( '%s for a party of %s', 'woothemes' ), $_friendly_date . $_friendly_time, $_friendly_number ) . '</span>';
+       if ( $_POST['people'] == 'special' ) {
 
-	 					} // End IF Statement
+        $_friendly_number = WTFactory::get_max_number_of_people() + 1;
+        $_friendly_number .= '+';
 
-	 					echo $_message;
+       } else {
 
-					} // End IF Statement
+        $_friendly_number = $_POST['people'];
 
-	 			break;
+       } // End IF Statement
 
+       $_message .= '<span class="confirmation_message">' . sprintf( __( '%s for a party of %s', 'woothemes' ), $_friendly_date . $_friendly_time, $_friendly_number ) . '</span>';
 
-	 		} // End SWITCH Statement
+       } // End IF Statement
 
-	 		exit;
+       echo $_message;
 
-	 	} // End ajax_functions()
+     } // End IF Statement
 
-	 	/*----------------------------------------
-	 	  get_table_to_seat()
-	 	  ----------------------------------------
+     break;
 
-	 	  * Check if there is a table available
-	 	  * to seat $number_of_people at $time
-	 	  * on $date. If there are more than
-	 	  * one, sort by the number of seats
-	 	  * and return the $table_id with the
-	 	  * closest seat count.
 
-	 	  * Params:
-	 	  * - int $number_of_people
-	 	  * - string $time
-	 	  * - string $date
-	 	  * - array $current_tables
-	 	  * - int $current_id
-	 	----------------------------------------*/
+    } // End SWITCH Statement
 
-	 	public function get_table_to_seat ( $number_of_people, $time, $date, $current_tables = array(), $current_id = 0 ) {
+    exit;
 
-	 		// TO DO
+   } // End ajax_functions()
 
-	 		// return 31; // TEMP - 2010-09-09
+   /*----------------------------------------
+     get_table_to_seat()
+     ----------------------------------------
 
-	 		global $wpdb;
+     * Check if there is a table available
+     * to seat $number_of_people at $time
+     * on $date. If there are more than
+     * one, sort by the number of seats
+     * and return the $table_id with the
+     * closest seat count.
 
-	 		// Setup defaults
-	 		$table_id = 0;
-	 		$best_table = 0;
-	 		$second_best_table = 0;
-	 		$number_of_people = (int) $number_of_people;
-	 		$number_of_people_plus_one = $number_of_people + 1;
-	 		$number_of_people_plus_two = $number_of_people + 2;
+     * Params:
+     * - int $number_of_people
+     * - string $time
+     * - string $date
+     * - array $current_tables
+     * - int $current_id
+   ----------------------------------------*/
 
-	 		// Setup query to check if there are any tables at all
-	 		// that could accomodate this party
-	 		/*
-	 		$query = "SELECT
-	 					terms.term_id as table_id, terms.name, terms.slug, meta.meta_value as number_of_seats
-	 				  FROM " . $wpdb->prefix . "terms as terms
-	 				  JOIN " . $wpdb->prefix . "term_taxonomy as tax ON terms.term_id = tax.term_id
-	 				  JOIN " . $wpdb->prefix . "woo_tables_meta as meta ON terms.term_id = meta.woo_tables_id
-	 				 WHERE meta.meta_key = 'number_of_seats'
-	 				 AND ( meta.meta_value = " . $number_of_people . " OR meta.meta_value = " . $number_of_people_plus_one . " OR meta.meta_value = " . $number_of_people_plus_two . " )";
-	 		*/
+   public function get_table_to_seat ( $number_of_people, $time, $date, $current_tables = array(), $current_id = 0 ) {
 
-	 		$query = "SELECT
-	 					terms.term_id as table_id, terms.name, terms.slug, meta.meta_value as number_of_seats
-	 				  FROM " . $wpdb->prefix . "terms as terms
-	 				  JOIN " . $wpdb->prefix . "term_taxonomy as tax ON terms.term_id = tax.term_id
-	 				  JOIN " . $wpdb->prefix . "woo_tables_meta as meta ON terms.term_id = meta.woo_tables_id
-	 				 WHERE meta.meta_key = 'number_of_seats'
-	 				 AND ( meta.meta_value >= " . $number_of_people . " )";
+    // TO DO
 
-	 		// Execute the query
-	 		$rs = $wpdb->get_results( $query, ARRAY_A );
+    // return 31; // TEMP - 2010-09-09
 
-	 		// If there are tables, process the data and return the table with
-	 		// the closest number of seats to the desired number
-	 		if ( $rs ) {
+    global $wpdb;
 
-	 			$available_tables = array();
+    // Setup defaults
+    $table_id = 0;
+    $best_table = 0;
+    $second_best_table = 0;
+    $number_of_people = (int) $number_of_people;
+    $number_of_people_plus_one = $number_of_people + 1;
+    $number_of_people_plus_two = $number_of_people + 2;
 
-	 			foreach ( $rs as $r ) {
+    // Setup query to check if there are any tables at all
+    // that could accomodate this party
+    /*
+    $query = "SELECT
+       terms.term_id as table_id, terms.name, terms.slug, meta.meta_value as number_of_seats
+        FROM " . $wpdb->prefix . "terms as terms
+        JOIN " . $wpdb->prefix . "term_taxonomy as tax ON terms.term_id = tax.term_id
+        JOIN " . $wpdb->prefix . "woo_tables_meta as meta ON terms.term_id = meta.woo_tables_id
+       WHERE meta.meta_key = 'number_of_seats'
+       AND ( meta.meta_value = " . $number_of_people . " OR meta.meta_value = " . $number_of_people_plus_one . " OR meta.meta_value = " . $number_of_people_plus_two . " )";
+    */
 
-	 				$number_of_seats = $r['number_of_seats'];
-	 				$term_id = $r['table_id'];
+    $query = "SELECT
+       terms.term_id as table_id, terms.name, terms.slug, meta.meta_value as number_of_seats
+        FROM " . $wpdb->prefix . "terms as terms
+        JOIN " . $wpdb->prefix . "term_taxonomy as tax ON terms.term_id = tax.term_id
+        JOIN " . $wpdb->prefix . "woo_tables_meta as meta ON terms.term_id = meta.woo_tables_id
+       WHERE meta.meta_key = 'number_of_seats'
+       AND ( meta.meta_value >= " . $number_of_people . " )";
 
-	 				$available_tables[$number_of_seats . '-' . $term_id] = $term_id;
+    // Execute the query
+    $rs = $wpdb->get_results( $query, ARRAY_A );
 
-	 			} // End FOREACH Loop
+    // If there are tables, process the data and return the table with
+    // the closest number of seats to the desired number
+    if ( $rs ) {
 
-	 			ksort( $available_tables );
+     $available_tables = array();
 
-	 			$table_ids_array = array();
+     foreach ( $rs as $r ) {
 
-	 			foreach ( $available_tables as $number_of_seats => $term_id ) {
+      $number_of_seats = $r['number_of_seats'];
+      $term_id = $r['table_id'];
 
-	 				$table_ids_array[] = $term_id;
+      $available_tables[$number_of_seats . '-' . $term_id] = $term_id;
 
-	 			} // End FOREACH Loop
+     } // End FOREACH Loop
 
-	 			/*
-	 			foreach ( $available_tables as $number_of_seats => $term_id ) {
+     ksort( $available_tables );
 
-	 				if ( $best_table == 0 ) { $best_table = $term_id; } // End IF Statement
-	 				// if ( $second_best_table == 0 && $table_id != 0 ) { $second_best_table = $term_id; } // End IF Statement
+     $table_ids_array = array();
 
-	 			} // End FOREACH Loop
-	 			*/
-	 		// } // End IF Statement
+     foreach ( $available_tables as $number_of_seats => $term_id ) {
 
-	 		// Okay, we have our $table_id. If it's not 0, lets see if there are any reservations
-	 		// at this table at the time and date supplied.
+      $table_ids_array[] = $term_id;
 
-		 		// if ( $best_table == 0 ) {} else {
-		 		if ( count( $available_tables ) == 0 ) {} else {
+     } // End FOREACH Loop
 
-		 				/*
-		 				if ( count( $current_tables ) ) {
+     /*
+     foreach ( $available_tables as $number_of_seats => $term_id ) {
 
-		 					$table_ids_array = array_merge( $table_ids_array, $current_tables ); // Make the current tables available without having to remove them.
+      if ( $best_table == 0 ) { $best_table = $term_id; } // End IF Statement
+      // if ( $second_best_table == 0 && $table_id != 0 ) { $second_best_table = $term_id; } // End IF Statement
 
-		 				} // End IF Statement
-		 				*/
+     } // End FOREACH Loop
+     */
+    // } // End IF Statement
 
-		 				$table_ids = join( ',', $table_ids_array );
+    // Okay, we have our $table_id. If it's not 0, lets see if there are any reservations
+    // at this table at the time and date supplied.
 
-				 		$query = "SELECT ID, post_title, post_date, post_name, post_author, meta_date.meta_value as reservation_date, meta_time.meta_value as reservation_time, $wpdb->terms.term_id as table_id
-									FROM $wpdb->posts
-									LEFT JOIN $wpdb->postmeta as meta_date ON($wpdb->posts.ID = meta_date.post_id)
-									LEFT JOIN $wpdb->postmeta as meta_time ON($wpdb->posts.ID = meta_time.post_id)
-									LEFT JOIN $wpdb->postmeta as meta_status ON($wpdb->posts.ID = meta_status.post_id)
-									LEFT JOIN $wpdb->term_relationships ON($wpdb->posts.ID = $wpdb->term_relationships.object_id)
-									LEFT JOIN $wpdb->term_taxonomy ON($wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id)
-									LEFT JOIN $wpdb->terms ON($wpdb->term_taxonomy.term_id = $wpdb->terms.term_id)
-									WHERE $wpdb->posts.post_type = 'reservation'
-									AND meta_date.meta_key = 'reservation_date'
-									AND meta_date.meta_value = '$date'
-									AND meta_time.meta_key = 'reservation_time'
-									AND meta_time.meta_value = '$time'
-									AND meta_status.meta_key = 'reservation_status'
-									AND meta_status.meta_value != 'cancelled'
-									AND $wpdb->posts.post_status = 'publish'
-									AND $wpdb->term_taxonomy.taxonomy = 'tables'
-									AND $wpdb->terms.term_id IN (" . $table_ids . ")";
+     // if ( $best_table == 0 ) {} else {
+     if ( count( $available_tables ) == 0 ) {} else {
 
-						if ( $current_id > 0 ) {
+       /*
+       if ( count( $current_tables ) ) {
 
-							$query .= " AND $wpdb->posts.ID != '$current_id'";
+        $table_ids_array = array_merge( $table_ids_array, $current_tables ); // Make the current tables available without having to remove them.
 
-						} // End IF Statement
+       } // End IF Statement
+       */
 
-									/*
-									if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'update' && isset( $_REQUEST['id'] ) && is_numeric( $_REQUEST['id'] ) ) {
+       $table_ids = join( ',', $table_ids_array );
 
-							 			$_id = (int) $_REQUEST['id'];
+       $query = "SELECT ID, post_title, post_date, post_name, post_author, meta_date.meta_value as reservation_date, meta_time.meta_value as reservation_time, $wpdb->terms.term_id as table_id
+         FROM $wpdb->posts
+         LEFT JOIN $wpdb->postmeta as meta_date ON($wpdb->posts.ID = meta_date.post_id)
+         LEFT JOIN $wpdb->postmeta as meta_time ON($wpdb->posts.ID = meta_time.post_id)
+         LEFT JOIN $wpdb->postmeta as meta_status ON($wpdb->posts.ID = meta_status.post_id)
+         LEFT JOIN $wpdb->term_relationships ON($wpdb->posts.ID = $wpdb->term_relationships.object_id)
+         LEFT JOIN $wpdb->term_taxonomy ON($wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id)
+         LEFT JOIN $wpdb->terms ON($wpdb->term_taxonomy.term_id = $wpdb->terms.term_id)
+         WHERE $wpdb->posts.post_type = 'reservation'
+         AND meta_date.meta_key = 'reservation_date'
+         AND meta_date.meta_value = '$date'
+         AND meta_time.meta_key = 'reservation_time'
+         AND meta_time.meta_value = '$time'
+         AND meta_status.meta_key = 'reservation_status'
+         AND meta_status.meta_value != 'cancelled'
+         AND $wpdb->posts.post_status = 'publish'
+         AND $wpdb->term_taxonomy.taxonomy = 'tables'
+         AND $wpdb->terms.term_id IN (" . $table_ids . ")";
 
-							 			// Get the current tables assigned.
-							 			$current_tables = wp_get_object_terms( $_id, 'tables' );
+      if ( $current_id > 0 ) {
 
-							 			if ( count( $current_tables ) ) {
+       $query .= " AND $wpdb->posts.ID != '$current_id'";
 
-							 				$query .= ' OR ' . $wpdb->posts.ID . ' = "' . $_id . '"';
+      } // End IF Statement
 
-							 			} // End IF Statement
+         /*
+         if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'update' && isset( $_REQUEST['id'] ) && is_numeric( $_REQUEST['id'] ) ) {
 
-							 		} // End IF Statement
-							 		*/
-						/*
-						if ( $second_best_table ) {
+           $_id = (int) $_REQUEST['id'];
 
-							$query .= " OR $wpdb->terms.term_id = " . $second_best_table . "";
+           // Get the current tables assigned.
+           $current_tables = wp_get_object_terms( $_id, 'tables' );
 
-						} // End IF Statement
-						*/
+           if ( count( $current_tables ) ) {
 
-						$query .= "	GROUP BY $wpdb->posts.ID ORDER BY meta_date.meta_value, meta_time.meta_value DESC";
+            $query .= ' OR ' . $wpdb->posts.ID . ' = "' . $_id . '"';
 
-				 		// Execute the query
-				 		$rs = $wpdb->get_results( $query, ARRAY_A );
+           } // End IF Statement
 
-		 				// If there are reservations, loop through and get the IDs of the suitable tables that are empty.
-		 				// Otherwise, assign the $best_table as $table_id... there's an opening!
-		 				if ( $rs ) {
+          } // End IF Statement
+          */
+      /*
+      if ( $second_best_table ) {
 
-		 					$open_suitable_tables = array();
+       $query .= " OR $wpdb->terms.term_id = " . $second_best_table . "";
 
-		 					// If the table assigned to this reservation is one of the $table_ids_array,
-		 					// don't assign it as an $open_suitable_table.
+      } // End IF Statement
+      */
 
-		 					$_filtered_tables = array();
+      $query .= " GROUP BY $wpdb->posts.ID ORDER BY meta_date.meta_value, meta_time.meta_value DESC";
 
-		 					foreach ( $table_ids_array as $table_key => $table ) {
+       // Execute the query
+       $rs = $wpdb->get_results( $query, ARRAY_A );
 
-		 						foreach ( $rs as $k => $v ) {
+       // If there are reservations, loop through and get the IDs of the suitable tables that are empty.
+       // Otherwise, assign the $best_table as $table_id... there's an opening!
+       if ( $rs ) {
 
-			 						// If the table_id returned is present in the table_ids_array, remove it as it's not available.
-			 						if ( $v['table_id'] == $table ) {
+        $open_suitable_tables = array();
 
-			 							unset( $table_ids_array[$table_key] );
+        // If the table assigned to this reservation is one of the $table_ids_array,
+        // don't assign it as an $open_suitable_table.
 
-			 						} else {
+        $_filtered_tables = array();
 
-			 							$_filtered_tables[] = $v['table_id'];
+        foreach ( $table_ids_array as $table_key => $table ) {
 
-			 						} // End IF Statement
+         foreach ( $rs as $k => $v ) {
 
-			 					} // End FOREACH Loop
+          // If the table_id returned is present in the table_ids_array, remove it as it's not available.
+          if ( $v['table_id'] == $table ) {
 
-		 					} // End FOREACH Loop
+           unset( $table_ids_array[$table_key] );
 
-		 					if ( $table_ids_array ) {
+          } else {
 
-		 						// Reindex table IDs into new array
-		 						foreach ( $table_ids_array as $t ) {
+           $_filtered_tables[] = $v['table_id'];
 
-		 							$open_suitable_tables[] = $t;
+          } // End IF Statement
 
-		 						} // End FOREACH Loop
+         } // End FOREACH Loop
 
-		 						$table_id = $open_suitable_tables[0];
+        } // End FOREACH Loop
 
-		 					} // End IF Statement
+        if ( $table_ids_array ) {
 
-		 				} else {
+         // Reindex table IDs into new array
+         foreach ( $table_ids_array as $t ) {
 
-		 					foreach ( $available_tables as $number_of_seats => $term_id ) {
+          $open_suitable_tables[] = $t;
 
-				 				if ( $best_table == 0 ) { $best_table = $term_id; } // End IF Statement
+         } // End FOREACH Loop
 
-				 			} // End FOREACH Loop
+         $table_id = $open_suitable_tables[0];
 
-		 					$table_id = $best_table;
+        } // End IF Statement
 
-		 				} // End IF Statement
+       } else {
 
-		 		} // End IF Statement
+        foreach ( $available_tables as $number_of_seats => $term_id ) {
 
-	 		} // End IF Statement
+         if ( $best_table == 0 ) { $best_table = $term_id; } // End IF Statement
 
-	 		return $table_id;
+        } // End FOREACH Loop
 
-	 	} // End get_table_to_seat()
+        $table_id = $best_table;
 
-	 	/*----------------------------------------
-	 	  get_form_fields()
-	 	  ----------------------------------------
+       } // End IF Statement
 
-	 	  * A helper function to compile an array
-	 	  * of form fields for use with validation.
-	 	----------------------------------------*/
+     } // End IF Statement
 
-	 	public function get_form_fields () {
+    } // End IF Statement
 
-	 		$fields = array(
-	 					array(
-	 							'field' 	=> 'reservation_date',
-	 							'type' 		=> 'date',
-	 							'message' 	=> __( 'Please enter a valid date for your reservation.', 'woothemes' ),
-	 							'required' 	=> 1
-	 						),
-	 					array(
-	 							'field' 	=> 'reservation_time',
-	 							'type' 		=> 'time',
-	 							'message' 	=> __( 'Please select a valid time for your reservation.', 'woothemes' ),
-	 							'required' 	=> 1
-	 						),
-	 					array(
-	 							'field' 	=> 'number_of_people',
-	 							'type' 		=> 'number_of_people',
-	 							'message' 	=> __( 'Please enter a valid number of people for your reservation.', 'woothemes' ),
-	 							'required' 	=> 1
-	 						),
-	 					array(
-	 							'field' 	=> 'reservation_instructions',
-	 							'type' 		=> 'text',
-	 							'message' 	=> __( 'Please enter instructions for your reservation.', 'woothemes' ),
-	 							'required' 	=> 0
-	 						),
-	 					array(
-	 							'field' 	=> 'contact_name',
-	 							'type' 		=> 'text',
-	 							'message' 	=> __( 'Please enter your full name.', 'woothemes' ),
-	 							'required' 	=> 1
-	 						),
-	 					array(
-	 							'field' 	=> 'contact_tel',
-	 							'type' 		=> 'text',
-	 							'message' 	=> __( 'Please enter a valid telephone number for us to contact you on.', 'woothemes' ),
-	 							'required' 	=> 1
-	 						),
-	 					array(
-	 							'field' 	=> 'contact_email',
-	 							'type' 		=> 'email',
-	 							'message' 	=> __( 'Please enter your e-mail address.', 'woothemes' ),
-	 							'required' 	=> 1
-	 						),
-	 					array(
-	 							'field' 	=> 'no_cookie',
-	 							'type' 		=> 'int',
-	 							'message' 	=> __( 'Please select if you are on a public computer (if you are, we won\'t save your details.)', 'woothemes' ),
-	 							'required' 	=> 0
-	 						)
-	 					);
+    return $table_id;
 
-	 		$fields = apply_filters( 'wootable_form_fields', $fields );
+   } // End get_table_to_seat()
 
-	 		return $fields;
+   /*----------------------------------------
+     get_form_fields()
+     ----------------------------------------
 
-	 	} // End get_form_fields()
+     * A helper function to compile an array
+     * of form fields for use with validation.
+   ----------------------------------------*/
 
-	 	/* Utility Functions
-		----------------------------------------*/
+   public function get_form_fields () {
 
-		/*----------------------------------------
-	 	  create_empty_variables()
-	 	  ----------------------------------------
+    $fields = array(
+       array(
+         'field'  => 'reservation_date',
+         'type'   => 'date',
+         'message'  => __( 'Please enter a valid date for your reservation.', 'woothemes' ),
+         'required'  => 1
+        ),
+       array(
+         'field'  => 'reservation_time',
+         'type'   => 'time',
+         'message'  => __( 'Please select a valid time for your reservation.', 'woothemes' ),
+         'required'  => 1
+        ),
+       array(
+         'field'  => 'number_of_people',
+         'type'   => 'number_of_people',
+         'message'  => __( 'Please enter a valid number of people for your reservation.', 'woothemes' ),
+         'required'  => 1
+        ),
+       array(
+         'field'  => 'reservation_instructions',
+         'type'   => 'text',
+         'message'  => __( 'Please enter instructions for your reservation.', 'woothemes' ),
+         'required'  => 0
+        ),
+       array(
+         'field'  => 'contact_name',
+         'type'   => 'text',
+         'message'  => __( 'Please enter your full name.', 'woothemes' ),
+         'required'  => 1
+        ),
+       array(
+         'field'  => 'contact_tel',
+         'type'   => 'text',
+         'message'  => __( 'Please enter a valid telephone number for us to contact you on.', 'woothemes' ),
+         'required'  => 0
+        ),
+       array(
+         'field'  => 'contact_email',
+         'type'   => 'email',
+         'message'  => __( 'Please enter your e-mail address.', 'woothemes' ),
+         'required'  => 1
+        ),
+       array(
+         'field'  => 'no_cookie',
+         'type'   => 'int',
+         'message'  => __( 'Please select if you are on a public computer (if you are, we won\'t save your details.)', 'woothemes' ),
+         'required'  => 0
+        )
+       );
 
-	 	  * A helper function to create empty
-	 	  * variables to hold form data.
-	 	----------------------------------------*/
+    $fields = apply_filters( 'wootable_form_fields', $fields );
 
-		function create_empty_variables () {
+    return $fields;
 
-			foreach ( $this->fields_detail as $field ) {
+   } // End get_form_fields()
 
-				$this->fields_for_form[$field['field']] = '';
+   /* Utility Functions
+  ----------------------------------------*/
 
-			} // End FOREACH Loop
+  /*----------------------------------------
+     create_empty_variables()
+     ----------------------------------------
 
-		} // End create_empty_variables()
+     * A helper function to create empty
+     * variables to hold form data.
+   ----------------------------------------*/
 
-		/*----------------------------------------
-	 	  create_post_variables()
-	 	  ----------------------------------------
+  function create_empty_variables () {
 
-	 	  * A helper function to create variables
-	 	  * from the $_POST'ed data.
-	 	----------------------------------------*/
+   foreach ( $this->fields_detail as $field ) {
 
-		function create_post_variables () {
+    $this->fields_for_form[$field['field']] = '';
 
-			foreach ( $this->fields_detail as $field ) {
+   } // End FOREACH Loop
 
-				$this->fields_for_form[$field['field']] = trim( strip_tags( $_POST[$field['field']] ) );
+  } // End create_empty_variables()
 
-			} // End FOREACH Loop
+  /*----------------------------------------
+     create_post_variables()
+     ----------------------------------------
 
-		} // End create_post_variables()
+     * A helper function to create variables
+     * from the $_POST'ed data.
+   ----------------------------------------*/
 
-		/*----------------------------------------
-	 	  create_form_variables()
-	 	  ----------------------------------------
+  function create_post_variables () {
 
-	 	  * A helper function to create variables
-	 	  * for use in the reservation form.
-	 	----------------------------------------*/
+   foreach ( $this->fields_detail as $field ) {
 
-		function create_form_variables () {
+    $this->fields_for_form[$field['field']] = trim( strip_tags( $_POST[$field['field']] ) );
 
-			foreach ( $this->fields_detail as $field ) {
+   } // End FOREACH Loop
 
-				if ( isset( $_POST[$field['field']] ) ) {
+  } // End create_post_variables()
 
-					$this->fields_for_form[$field['field']] = $_POST[$field['field']];
+  /*----------------------------------------
+     create_form_variables()
+     ----------------------------------------
 
-				} else {
+     * A helper function to create variables
+     * for use in the reservation form.
+   ----------------------------------------*/
 
-					$this->fields_for_form[$field['field']] = '';
+  function create_form_variables () {
 
-				}
+   foreach ( $this->fields_detail as $field ) {
 
-			} // End FOREACH Loop
+    if ( isset( $_POST[$field['field']] ) ) {
 
-		} // End create_form_variables()
+     $this->fields_for_form[$field['field']] = $_POST[$field['field']];
 
-	 	/*----------------------------------------
-	 	  register_enqueues()
-	 	  ----------------------------------------
+    } else {
 
-	 	  * A helper function to register the
-	 	  * various JavaScript enqueues.
-	 	----------------------------------------*/
+     $this->fields_for_form[$field['field']] = '';
 
-	 	private function register_enqueues () {
+    }
 
-	 		// Enqueue scripts and styles for the frontend
-	 		add_action( 'wp_print_scripts', array( &$this, 'enqueue_script' ), null, 2 );
+   } // End FOREACH Loop
 
-	 	} // End register_enqueues()
+  } // End create_form_variables()
 
-	 	/*----------------------------------------
-	 	  enqueue_script()
-	 	  ----------------------------------------
+   /*----------------------------------------
+     register_enqueues()
+     ----------------------------------------
 
-	 	  * Enqueue various JavaScript files
-	 	  * for use on the frontend.
-	 	----------------------------------------*/
+     * A helper function to register the
+     * various JavaScript enqueues.
+   ----------------------------------------*/
 
-		public function enqueue_script () {
+   private function register_enqueues () {
 
-			if ( ( is_page( $this->bookings_page ) || is_page( $this->manage_page ) || is_page_template('template-menu.php') || is_page_template('template-menu-full.php') || is_page_template('template-location.php') )  ) {
-				wp_enqueue_script( 'jquery-ui-core' );
-				wp_enqueue_script( 'jquery-ui-dialog' );
-				wp_enqueue_script( 'jquery-ui-datepicker', $this->plugin_url . '/assets/js/jquery.ui.datepicker.min.js', array( 'jquery', 'jquery-ui-core' ), '1.8.4', false );
-				wp_enqueue_script( 'jquery-validate', $this->plugin_url . '/assets/js/jquery-validate/jquery.validate.min.js', array( 'jquery' ), '1.7', false );
-				// Enqueue the JavaScript functions file(s)
-		 		wp_enqueue_script('woo-table-functions', $this->plugin_url . '/assets/js/functions.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-dialog', 'jquery-validate' ), '0.0.0.1', false);
-		 		wp_enqueue_script('woo-table-functions-validate', $this->plugin_url . '/assets/js/functions-validate.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-dialog', 'jquery-validate' ), '0.0.0.1', false);
-		 	} elseif( ( is_active_widget( false,false,'widget_wootable_makereservation', true ) )) {
-		 		wp_enqueue_script( 'jquery-ui-core' );
-				wp_enqueue_script( 'jquery-ui-datepicker', $this->plugin_url . '/assets/js/jquery.ui.datepicker.min.js', array( 'jquery', 'jquery-ui-core' ), '1.8.4', false );
-				// Enqueue the JavaScript functions file
-		 		wp_enqueue_script('woo-table-functions', $this->plugin_url . '/assets/js/functions.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker' ), '0.0.0.1', false);
-		 	} else {
-		 		//No JS
-		 	}
+    // Enqueue scripts and styles for the frontend
+    add_action( 'wp_print_scripts', array( &$this, 'enqueue_script' ), null, 2 );
 
-		} // End enqueue_script()
+   } // End register_enqueues()
 
-	} // End Class WooTable_FrontEnd
+   /*----------------------------------------
+     enqueue_script()
+     ----------------------------------------
+
+     * Enqueue various JavaScript files
+     * for use on the frontend.
+   ----------------------------------------*/
+
+  public function enqueue_script () {
+
+   if ( ( is_page( $this->bookings_page ) || is_page( $this->manage_page ) || is_page_template('template-menu.php') || is_page_template('template-menu-full.php') || is_page_template('template-location.php') )  ) {
+    wp_enqueue_script( 'jquery-ui-core' );
+    wp_enqueue_script( 'jquery-ui-dialog' );
+    wp_enqueue_script( 'jquery-ui-datepicker', $this->plugin_url . '/assets/js/jquery.ui.datepicker.min.js', array( 'jquery', 'jquery-ui-core' ), '1.8.4', false );
+    wp_enqueue_script( 'jquery-validate', $this->plugin_url . '/assets/js/jquery-validate/jquery.validate.min.js', array( 'jquery' ), '1.7', false );
+    // Enqueue the JavaScript functions file(s)
+     wp_enqueue_script('woo-table-functions', $this->plugin_url . '/assets/js/functions.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-dialog', 'jquery-validate' ), '0.0.0.1', false);
+     wp_enqueue_script('woo-table-functions-validate', $this->plugin_url . '/assets/js/functions-validate.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-dialog', 'jquery-validate' ), '0.0.0.1', false);
+    } elseif( ( is_active_widget( false,false,'widget_wootable_makereservation', true ) )) {
+     wp_enqueue_script( 'jquery-ui-core' );
+    wp_enqueue_script( 'jquery-ui-datepicker', $this->plugin_url . '/assets/js/jquery.ui.datepicker.min.js', array( 'jquery', 'jquery-ui-core' ), '1.8.4', false );
+    // Enqueue the JavaScript functions file
+     wp_enqueue_script('woo-table-functions', $this->plugin_url . '/assets/js/functions.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker' ), '0.0.0.1', false);
+    } else {
+     //No JS
+    }
+
+  } // End enqueue_script()
+
+ } // End Class WooTable_FrontEnd
 ?>
