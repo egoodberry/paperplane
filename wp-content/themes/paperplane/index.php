@@ -14,7 +14,7 @@
         <img src="<?php bloginfo('template_directory'); ?>/images/logo.png" alt="Paper Plane" />
       </a>
 
-      <a id="brand" href="#"><div></div></a>
+      <a id="brand" href="http://www.vicsandwich.com"><div></div></a>
 
     </div>
   </div><!-- /header -->
@@ -113,8 +113,8 @@
 
       <section class="links">
         <a href="mailto:info@vicbrands.com">info@vicbrands.com</a> /
-        <a href="#">Facebook</a> /
-        <a href="#">Mailing List</a>
+        <a href="https://www.facebook.com/paperplaneatl">Facebook</a> /
+        <a href="http://eepurl.com/z4gPf">Mailing List</a>
       </section>
 
       <section>
