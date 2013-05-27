@@ -434,6 +434,39 @@ form {
   padding: 10px 25px;
 }
 
+// manage
+#wootable-bookings-table {
+  td, th {
+    text-align: center;
+    letter-spacing: 1px;
+    font-size: .8em;
+    border: solid 1px $black;
+  }
+  th {
+    font-family: $header-font;
+    text-transform: uppercase;
+    background: $gray;
+    padding: 5px 10px;
+  }
+  td {
+    background: $calendar-gray;
+    padding: 15px 10px;
+  }
+
+  a {
+    @include button;
+    padding: 5px 10px;
+    margin-right: 5px;
+    display: inline-block;
+    color: $blue;
+    border-color: $blue;
+    &.confirm {
+      color: $white;
+      border-color: $white;
+    }
+  }
+}
+
 
 @media only screen and (max-width: 767px) {
   #logo {

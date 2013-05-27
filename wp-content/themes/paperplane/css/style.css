@@ -337,6 +337,40 @@ form {
   margin-bottom: 3em;
   padding: 10px 25px; }
 
+#wootable-bookings-table td, #wootable-bookings-table th {
+  text-align: center;
+  letter-spacing: 1px;
+  font-size: .8em;
+  border: solid 1px #0e100d; }
+#wootable-bookings-table th {
+  font-family: "futura-pt", sans-serif;
+  text-transform: uppercase;
+  background: #353333;
+  padding: 5px 10px; }
+#wootable-bookings-table td {
+  background: #414042;
+  padding: 15px 10px; }
+#wootable-bookings-table a {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 5px 50px;
+  font-family: "futura-pt", sans-serif;
+  font-size: 1em;
+  color: #fff;
+  background: transparent;
+  border: solid 1px white;
+  -webkit-appearance: none;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  display: inline-block;
+  color: #a6bac4;
+  border-color: #a6bac4; }
+  #wootable-bookings-table a.confirm {
+    color: white;
+    border-color: white; }
+
 @media only screen and (max-width: 767px) {
   #logo {
     border: none !important; }
