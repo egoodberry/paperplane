@@ -1,6 +1,6 @@
 (function() {
   App.setUpSlideshows = function() {
-    $('.slideshow').each(function() {
+    $('.slideshow-container').each(function() {
       var container = $(this)
       , photoContainer = container.find('.photo-stream')
       , photos = photoContainer.find('.photo')

@@ -20,7 +20,7 @@
   </div><!-- /header -->
 
   <div id="content">
-    <section id="home" class="content">
+    <section id="home" class="content slideshow-container">
 
       <!-- home background -->
       <?php show_slideshow('Home Photos') ?>
@@ -51,7 +51,7 @@
 
     </section>
 
-    <section id="about" class="content">
+    <section id="about" class="content slideshow-container">
       <!-- about background -->
       <?php show_slideshow('About Photos') ?>
 

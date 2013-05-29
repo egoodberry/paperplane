@@ -94,21 +94,21 @@ hr {
         height: 100%;
         background-size: cover;
         float: left; }
-    #home .slideshow .nav, #about .slideshow .nav {
-      position: absolute;
-      z-index: 10;
-      width: 24px;
-      height: 52px;
-      cursor: pointer;
-      top: 310px; }
-      #home .slideshow .nav:hover, #about .slideshow .nav:hover {
-        background-position-y: -52px; }
-      #home .slideshow .nav.prev, #about .slideshow .nav.prev {
-        left: 150px;
-        background-image: url(../images/nav-left.png); }
-      #home .slideshow .nav.next, #about .slideshow .nav.next {
-        right: 150px;
-        background-image: url(../images/nav-right.png); }
+  #home .nav, #about .nav {
+    position: absolute;
+    z-index: 10;
+    width: 24px;
+    height: 52px;
+    cursor: pointer;
+    top: 310px; }
+    #home .nav:hover, #about .nav:hover {
+      background-position-y: -52px; }
+    #home .nav.prev, #about .nav.prev {
+      left: 150px;
+      background-image: url(../images/nav-left.png); }
+    #home .nav.next, #about .nav.next {
+      right: 150px;
+      background-image: url(../images/nav-right.png); }
 
 #home .address, #home .phone {
   font-family: "futura-pt", sans-serif;
@@ -391,5 +391,5 @@ form {
       margin: auto;
       vertical-align: middle; }
 
-  .slideshow .nav {
+  .slideshow-container .nav {
     display: none; } }

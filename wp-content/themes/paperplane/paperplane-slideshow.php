@@ -1,9 +1,9 @@
 <?php
   function show_slideshow($title) {
       ?>
+      <a class="nav prev"></a>
+      <a class="nav next"></a>
       <section class="slideshow">
-        <a class="nav prev"></a>
-        <a class="nav next"></a>
         <section class="photo-stream">
           <?php
           $parent = get_page_by_title( $title );
