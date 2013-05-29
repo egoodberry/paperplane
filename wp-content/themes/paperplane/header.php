@@ -4,7 +4,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Paper Plane</title>
   <meta name="description" content="">
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/vendor/reset.css" />
   <link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/vendor/grid.css" />
   <link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/layout.css" />
