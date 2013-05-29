@@ -120,6 +120,22 @@ hr {
     position: absolute;
     z-index: 1;
     width: 100%;
+    height: 100%;
+
+    .photo-stream {
+      width: 100%;
+      height: 100%;
+      left: 0;
+      // position: absolute;
+      position: relative;
+
+      .photo {
+        height: 100%;
+        background-size: cover;
+        float: left;
+
+      }
+    }
 
     .nav {
       position: absolute;

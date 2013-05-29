@@ -83,7 +83,17 @@ hr {
   #home .slideshow, #about .slideshow {
     position: absolute;
     z-index: 1;
-    width: 100%; }
+    width: 100%;
+    height: 100%; }
+    #home .slideshow .photo-stream, #about .slideshow .photo-stream {
+      width: 100%;
+      height: 100%;
+      left: 0;
+      position: relative; }
+      #home .slideshow .photo-stream .photo, #about .slideshow .photo-stream .photo {
+        height: 100%;
+        background-size: cover;
+        float: left; }
     #home .slideshow .nav, #about .slideshow .nav {
       position: absolute;
       z-index: 10;
