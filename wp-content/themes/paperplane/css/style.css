@@ -392,4 +392,30 @@ form {
       vertical-align: middle; }
 
   .slideshow-container .nav {
-    display: none; } }
+    display: none; }
+
+  #wootable-calendar {
+    width: 100%; }
+
+  .reservations-form {
+    margin-top: 1em; }
+
+  .grid_6 {
+    padding-left: 0 !important; }
+
+  .reservations-form * {
+    float: none !important;
+    position: static !important;
+    width: auto !important; }
+  .reservations-form label, .reservations-form input {
+    display: block; }
+  .reservations-form select {
+    opacity: 1 !important; }
+  .reservations-form .customSelect {
+    display: none !important; }
+
+  .woo-sc-box {
+    width: auto !important; }
+
+  .ui-dialog {
+    width: auto !important; } }

@@ -481,7 +481,6 @@ form {
   }
 }
 
-
 @media only screen and (max-width: 767px) {
   #logo {
     border: none !important;
@@ -496,5 +495,36 @@ form {
   }
   .slideshow-container .nav {
     display: none;
+  }
+  #wootable-calendar {
+    width: 100%
+  }
+  .reservations-form {
+    margin-top: 1em;
+  }
+  .grid_6 {
+    padding-left: 0 !important;
+  }
+  .reservations-form {
+    * {
+      float: none !important;
+      position: static !important;
+      width: auto !important;
+    }
+    label, input {
+      display: block;
+    }
+    select {
+      opacity: 1 !important;
+    }
+    .customSelect {
+      display: none !important;
+    }
+  }
+  .woo-sc-box {
+    width: auto !important;
+  }
+  .ui-dialog {
+    width: auto !important;
   }
 }
