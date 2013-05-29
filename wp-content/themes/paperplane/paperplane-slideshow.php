@@ -11,7 +11,8 @@
           if ( $images ) {
             $i = 1;
             foreach ( $images as $attachment_id => $attachment ) {
-              $src = wp_get_attachment_image_src( $attachment_id , 'full')[0];
+              $src_data = wp_get_attachment_image_src( $attachment_id , 'full');
+              $src = $src_data[0];
               $style = '';
               $class = '';
               if ( $i === 2 ) {
