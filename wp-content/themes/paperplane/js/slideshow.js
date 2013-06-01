@@ -48,12 +48,20 @@
         img.src = src;
       }
 
-      container.find('a.prev').click(function() {
-        step('prev');
-      });
-      container.find('a.next').click(function() {
-        step('next');
-      });
+      container.find('a.prev')
+        .unbind('click')
+        .bind('click', function() {
+          step('prev');
+        });
+      container.find('a.next')
+        .unbind('click')
+        .bind('click', function() {
+          step('next');
+        });
     });
   };
+
+  $(window).bind('resize', function() {
+    App.setUpSlideshows();
+  });
 })();

@@ -130,7 +130,8 @@ hr {
 
       .photo {
         height: 100%;
-        background-size: cover;
+        background-size: 100%;
+        background-repeat: no-repeat;
         float: left;
       }
     }
@@ -187,6 +188,11 @@ hr {
     padding: 20px 65px;
     display: inline-block;
     margin-bottom: 2em;
+
+    &:hover {
+      background: $blue;
+      color: $black;
+    }
   }
   em {
     font-size: .8em;
@@ -197,6 +203,9 @@ hr {
   p {
     margin: 1em 0;
     line-height: 1.7em;
+  }
+  .nav {
+    top: 190px;
   }
 }
 
@@ -330,6 +339,10 @@ hr {
 // forms
 input[type=submit], button {
   @include button;
+  &:hover {
+    background: $white;
+    color: $black;
+  }
 }
 label {
   display: inline-block;

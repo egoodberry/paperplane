@@ -92,7 +92,8 @@ hr {
       position: relative; }
       #home .slideshow .photo-stream .photo, #about .slideshow .photo-stream .photo {
         height: 100%;
-        background-size: cover;
+        background-size: 100%;
+        background-repeat: no-repeat;
         float: left; }
   #home .nav, #about .nav {
     position: absolute;
@@ -143,12 +144,17 @@ hr {
     padding: 20px 65px;
     display: inline-block;
     margin-bottom: 2em; }
+    #reserve a:hover {
+      background: #a6bac4;
+      color: #0e100d; }
   #reserve em {
     font-size: .8em; }
 
 #about p {
   margin: 1em 0;
   line-height: 1.7em; }
+#about .nav {
+  top: 190px; }
 
 #menus {
   background: #323131; }
@@ -251,6 +257,9 @@ input[type=submit], button {
   -webkit-appearance: none;
   cursor: pointer;
   text-decoration: none; }
+  input[type=submit]:hover, button:hover {
+    background: white;
+    color: #0e100d; }
 
 label {
   display: inline-block;
