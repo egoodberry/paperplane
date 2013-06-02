@@ -64,7 +64,7 @@
         <div class="vr">&nbsp;</div>
 
         <div class="row">
-          <div class="grid_12">
+          <div class="grid_10 prefix_1">
             <p>
               Our story begins with the question: What to drink? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse erat tellus, facilisis et commodo id, lacinia in purus.
             </p>
@@ -123,8 +123,7 @@
         <p>Tel: 404 377 9308</p>
       </section>
 
-<!--      <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=340+Church+Street+Decatur,+GA+30030&ie=UTF8&hq=&hnear=340+Church+St,+Decatur,+Georgia+30030&gl=us&t=m&z=14&ll=33.774048,-84.294923&output=embed"></iframe>
--->
+      <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=340+Church+Street+Decatur,+GA+30030&ie=UTF8&hq=&hnear=340+Church+St,+Decatur,+Georgia+30030&gl=us&t=m&z=14&ll=33.774048,-84.294923&output=embed"></iframe>
 
       <p class="open-map">
         <a href="https://maps.google.com/maps?q=340+Church+Street+Decatur,+GA+30030&amp;ie=UTF8&amp;hq=&amp;hnear=340+Church+St,+Decatur,+Georgia+30030&amp;gl=us&amp;t=m&amp;z=14&amp;ll=33.774048,-84.294923&amp;source=embed">Open Map</a>
