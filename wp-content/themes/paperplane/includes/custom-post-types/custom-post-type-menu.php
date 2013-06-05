@@ -111,6 +111,7 @@ class WooMenu {
    "woo_menu_price" => __( 'Price', 'woothemes' ),
    "woo_menu_rating" => __( 'Rating', 'woothemes' ),
    "woo_menu_type" => __( 'Menu Type', 'woothemes' ),
+   "display_order" => __( 'Menu Order', 'woothemes' ),
   );
 
   return $columns;
@@ -121,6 +122,10 @@ class WooMenu {
   global $post;
   switch ($column)
   {
+   case "display_order":
+    $post = get_post();
+    echo $post->menu_order;
+    break;
    case "woo_menu_description":
     the_excerpt();
     break;
