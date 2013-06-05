@@ -430,7 +430,8 @@ form {
     width: auto !important; }
 
   .title {
-    width: 320px; }
+    width: 320px;
+    display: block; }
 
   #about {
     font-size: 16px; }
