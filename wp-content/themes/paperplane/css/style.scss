@@ -540,4 +540,14 @@ form {
   .ui-dialog {
     width: auto !important;
   }
+
+  .title {
+    width: 320px;
+  }
+  #about {
+    font-size: 16px;
+    .grid_10 {
+      width: auto;
+    }
+  }
 }

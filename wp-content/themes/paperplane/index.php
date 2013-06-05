@@ -37,18 +37,19 @@
     </section>
 
     <section id="reserve" class="content">
-      <h1>
-        <span class="number">02</span>
-        Reserve
-      </h1>
-      <div class="vr">&nbsp;</div>
+      <div class="container">
+        <h1>
+          <span class="number">02</span>
+          Reserve
+        </h1>
+        <div class="vr">&nbsp;</div>
 
-      <p class="reserve-warning">Reservations are available for parties of 3 or more.</p>
+        <p class="reserve-warning">Reservations are available for parties of 3 or more.</p>
 
-      <a href="/reservations">Book a Table</a>
+        <a href="/reservations">Book a Table</a>
 
-      <p><em>You will be taken to a new page.</em></p>
-
+        <p><em>You will be taken to a new page.</em></p>
+      </div>
     </section>
 
     <section id="about" class="content slideshow-container">

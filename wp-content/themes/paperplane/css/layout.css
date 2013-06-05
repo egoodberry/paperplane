@@ -83,4 +83,7 @@ iframe {
       width: auto; }
     #content #menus .menu-item span {
       float: none;
-      display: block; } }
+      display: block; }
+
+  iframe {
+    display: none; } }

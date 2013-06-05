@@ -427,4 +427,12 @@ form {
     width: auto !important; }
 
   .ui-dialog {
-    width: auto !important; } }
+    width: auto !important; }
+
+  .title {
+    width: 320px; }
+
+  #about {
+    font-size: 16px; }
+    #about .grid_10 {
+      width: auto; } }
