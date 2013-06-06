@@ -5,9 +5,10 @@
 
       <nav>
         <div><a href="/reservations" class="external">Reserve</a></div>
-        <div><a href="#information">Info</a></div>
+        <div><a href="#information">Contact</a></div>
         <div><a href="#about">About</a></div>
         <div><a href="#menus">Menus</a></div>
+        <div class="mobile"><a href="http://www.vicsandwich.com" class="external">Victory</a></div>
       </nav>
 
       <a id="logo" href="#home" class="visualNav">
@@ -40,7 +41,7 @@
       <div class="phone">404 377 9300</div>
     </section>
 
-    <section id="information" class="content">
+    <section id="contact" class="content">
       <div class="container">
         <h1>
           <span class="number">02</span>
@@ -98,7 +99,7 @@
         <div class="vr">&nbsp;</div>
 
         <div class="row">
-          <div class="grid_10 prefix_1">
+          <div class="grid_10 content">
             <p>
               Our story begins with the question: What to drink? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse erat tellus, facilisis et commodo id, lacinia in purus.
             </p>
@@ -122,6 +123,8 @@
         Menus
       </h1>
       <div class="vr">&nbsp;</div>
+
+      <p><em>The menus below are representative, as our menu items change often</em></p>
 
       <div class="container cf">
         <?php show_menus(); ?>

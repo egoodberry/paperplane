@@ -41,6 +41,13 @@ a {
   color: $white;
 }
 
+.warning {
+  font-family: $header-font;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin: 2em 0;
+}
+
 .cf:before,
 .cf:after {
     content: " "; /* 1 */
@@ -176,15 +183,9 @@ hr {
   }
 }
 
-#information {
+#contact {
   background: $bg-reserve;
 
-  .reserve-warning {
-    font-family: $header-font;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    margin: 2em 0;
-  }
   a.button {
     @include button;
     border-color: $blue;
@@ -212,11 +213,16 @@ hr {
   .nav {
     top: 190px;
   }
+  .grid_10 {
+    float: none;
+    display: block;
+    margin: 0 auto;
+  }
 }
 
 #menus {
   .menu {
-    margin-bottom: 2em;
+    margin-top: 2em;
 
     .menu-item {
       margin-bottom: 1em;
@@ -241,7 +247,7 @@ hr {
   }
 }
 
-#information {
+#contact {
   section {
     line-height: 1.7em;
   }
@@ -494,6 +500,12 @@ form {
       color: $white;
       border-color: $white;
     }
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .mobile {
+    display: none !important;
   }
 }
 

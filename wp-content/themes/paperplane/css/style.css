@@ -34,6 +34,12 @@ h4 {
 a {
   color: white; }
 
+.warning {
+  font-family: "futura-pt", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin: 2em 0; }
+
 .cf:before,
 .cf:after {
   content: " ";
@@ -123,14 +129,9 @@ hr {
   font-weight: 500;
   font-size: 1.2em; }
 
-#information {
+#contact {
   background: #211f1f; }
-  #information .reserve-warning {
-    font-family: "futura-pt", sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    margin: 2em 0; }
-  #information a.button {
+  #contact a.button {
     text-transform: uppercase;
     letter-spacing: 1px;
     padding: 5px 50px;
@@ -148,10 +149,10 @@ hr {
     padding: 20px 65px;
     display: inline-block;
     margin-bottom: 2em; }
-    #information a.button:hover {
+    #contact a.button:hover {
       background: #a6bac4;
       color: #0e100d; }
-  #information em {
+  #contact em {
     font-size: .8em; }
 
 #about p {
@@ -159,9 +160,13 @@ hr {
   line-height: 1.7em; }
 #about .nav {
   top: 190px; }
+#about .grid_10 {
+  float: none;
+  display: block;
+  margin: 0 auto; }
 
 #menus .menu {
-  margin-bottom: 2em; }
+  margin-top: 2em; }
   #menus .menu .menu-item {
     margin-bottom: 1em; }
     #menus .menu .menu-item .name-and-description {
@@ -176,11 +181,11 @@ hr {
     #menus .menu .menu-item .price {
       float: right; }
 
-#information section {
+#contact section {
   line-height: 1.7em; }
-#information .links {
+#contact .links {
   margin: 1em 0; }
-#information .open-map {
+#contact .open-map {
   font-family: "futura-pt", sans-serif;
   text-transform: uppercase; }
 
@@ -392,6 +397,9 @@ form {
     color: white;
     border-color: white; }
 
+@media only screen and (min-width: 768px) {
+  .mobile {
+    display: none !important; } }
 @media only screen and (max-width: 767px) {
   #logo {
     border: none !important; }
