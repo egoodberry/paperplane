@@ -5,7 +5,7 @@
 
       <nav>
         <div><a href="/reservations" class="external">Reserve</a></div>
-        <div><a href="#information">Contact</a></div>
+        <div><a href="#contact">Contact</a></div>
         <div><a href="#about">About</a></div>
         <div><a href="#menus">Menus</a></div>
         <div class="mobile"><a href="http://www.vicsandwich.com" class="external">Victory</a></div>
