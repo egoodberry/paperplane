@@ -84,6 +84,8 @@ iframe {
 
   #content {
     padding-top: 50px; }
+    #content #home {
+      padding-bottom: 2em; }
     #content #menus .menu-item .name-and-description {
       float: none;
       text-align: center;

@@ -57,6 +57,10 @@ hr {
   border-bottom: solid 1px white;
   width: 45px;
   margin: 25px auto; }
+  hr.large {
+    width: auto;
+    margin-top: 3em;
+    margin-bottom: 2em; }
 
 #header {
   background: #252324;
@@ -116,17 +120,17 @@ hr {
   text-transform: uppercase;
   letter-spacing: 4px; }
 #home .phone {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 1.2em; }
 
-#reserve {
+#information {
   background: #211f1f; }
-  #reserve .reserve-warning {
+  #information .reserve-warning {
     font-family: "futura-pt", sans-serif;
     text-transform: uppercase;
     letter-spacing: 4px;
     margin: 2em 0; }
-  #reserve a {
+  #information a.button {
     text-transform: uppercase;
     letter-spacing: 1px;
     padding: 5px 50px;
@@ -144,10 +148,10 @@ hr {
     padding: 20px 65px;
     display: inline-block;
     margin-bottom: 2em; }
-    #reserve a:hover {
+    #information a.button:hover {
       background: #a6bac4;
       color: #0e100d; }
-  #reserve em {
+  #information em {
     font-size: .8em; }
 
 #about p {
@@ -156,23 +160,21 @@ hr {
 #about .nav {
   top: 190px; }
 
-#menus {
-  background: #323131; }
-  #menus .menu {
-    margin-bottom: 2em; }
-    #menus .menu .menu-item {
-      margin-bottom: 1em; }
-      #menus .menu .menu-item .name-and-description {
-        float: left;
-        text-align: left;
-        width: 90%; }
-        #menus .menu .menu-item .name-and-description .name {
-          text-transform: uppercase; }
-        #menus .menu .menu-item .name-and-description .description {
-          margin-left: .3em;
-          font-style: italic; }
-      #menus .menu .menu-item .price {
-        float: right; }
+#menus .menu {
+  margin-bottom: 2em; }
+  #menus .menu .menu-item {
+    margin-bottom: 1em; }
+    #menus .menu .menu-item .name-and-description {
+      float: left;
+      text-align: left;
+      width: 90%; }
+      #menus .menu .menu-item .name-and-description .name {
+        text-transform: uppercase; }
+      #menus .menu .menu-item .name-and-description .description {
+        margin-left: .3em;
+        font-style: italic; }
+    #menus .menu .menu-item .price {
+      float: right; }
 
 #information section {
   line-height: 1.7em; }

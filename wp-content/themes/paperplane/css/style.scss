@@ -63,6 +63,11 @@ hr {
   border-bottom: solid 1px $white;
   width: 45px;
   margin: 25px auto;
+  &.large {
+    width: auto;
+    margin-top: 3em;
+    margin-bottom: 2em;
+  }
 }
 
 
@@ -166,12 +171,12 @@ hr {
     letter-spacing: 4px;
   }
   .phone {
-    font-weight: 600;
+    font-weight: 500;
     font-size: 1.2em;
   }
 }
 
-#reserve {
+#information {
   background: $bg-reserve;
 
   .reserve-warning {
@@ -180,7 +185,7 @@ hr {
     letter-spacing: 4px;
     margin: 2em 0;
   }
-  a {
+  a.button {
     @include button;
     border-color: $blue;
     border-width: 6px;
@@ -210,8 +215,6 @@ hr {
 }
 
 #menus {
-  background: $bg-menu;
-
   .menu {
     margin-bottom: 2em;
 

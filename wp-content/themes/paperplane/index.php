@@ -4,10 +4,10 @@
     <div id="header-inner">
 
       <nav>
-        <div><a href="#reserve">Reserve</a></div>
+        <div><a href="/reservations" class="external">Reserve</a></div>
+        <div><a href="#information">Info</a></div>
         <div><a href="#about">About</a></div>
         <div><a href="#menus">Menus</a></div>
-        <div><a href="#information">Information</a></div>
       </nav>
 
       <a id="logo" href="#home" class="visualNav">
@@ -40,19 +40,48 @@
       <div class="phone">404 377 9300</div>
     </section>
 
-    <section id="reserve" class="content">
+    <section id="information" class="content">
       <div class="container">
         <h1>
           <span class="number">02</span>
-          Reserve
+          Contact
         </h1>
         <div class="vr">&nbsp;</div>
 
         <p class="reserve-warning">Reservations are available for parties of 3 or more.</p>
 
-        <a href="/reservations">Book a Table</a>
+        <a href="/reservations" class="button">Book a Table</a>
 
         <p><em>You will be taken to a new page.</em></p>
+
+        <hr class="large" />
+
+        <section>
+          <h3>
+            Operating Hours
+          </h3>
+          <p>Tuesday to Thursday, 5.00p &#8212; 12.00a</p>
+          <p>Friday to Saturday, 5.00p &#8212; 1.00a</p>
+          <p>Sunday and Monday, Closed</p>
+        </section>
+
+        <section class="links">
+          <a href="mailto:info@vicbrands.com">info@vicbrands.com</a> /
+          <a href="https://www.facebook.com/paperplaneatl">Facebook</a> /
+          <a href="http://eepurl.com/z4gPf">Mailing List</a>
+        </section>
+
+        <section>
+          <p>340 Church Street</p>
+          <p>Decatur, GA 30030</p>
+          <p>Tel: 404 377 9308</p>
+        </section>
+
+        <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=340+Church+Street+Decatur,+GA+30030&ie=UTF8&hq=&hnear=340+Church+St,+Decatur,+Georgia+30030&gl=us&t=m&z=14&ll=33.774048,-84.294923&output=embed"></iframe>
+
+        <p class="open-map">
+          <a href="https://maps.google.com/maps?q=340+Church+Street+Decatur,+GA+30030&amp;ie=UTF8&amp;hq=&amp;hnear=340+Church+St,+Decatur,+Georgia+30030&amp;gl=us&amp;t=m&amp;z=14&amp;ll=33.774048,-84.294923&amp;source=embed">Open Map</a>
+        </p>
       </div>
     </section>
 
@@ -97,42 +126,6 @@
       <div class="container cf">
         <?php show_menus(); ?>
       </div>
-
-    </section>
-
-    <section id="information" class="content">
-      <h1>
-        <span class="number">05</span>
-        Information
-      </h1>
-      <div class="vr">&nbsp;</div>
-
-      <section>
-        <h3>
-          Operating Hours
-        </h3>
-        <p>Tuesday to Thursday, 5.00p &#8212; 12.00a</p>
-        <p>Friday to Saturday, 5.00p &#8212; 1.00a</p>
-        <p>Sunday and Monday, Closed</p>
-      </section>
-
-      <section class="links">
-        <a href="mailto:info@vicbrands.com">info@vicbrands.com</a> /
-        <a href="https://www.facebook.com/paperplaneatl">Facebook</a> /
-        <a href="http://eepurl.com/z4gPf">Mailing List</a>
-      </section>
-
-      <section>
-        <p>340 Church Street</p>
-        <p>Decatur, GA 30030</p>
-        <p>Tel: 404 377 9308</p>
-      </section>
-
-      <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=340+Church+Street+Decatur,+GA+30030&ie=UTF8&hq=&hnear=340+Church+St,+Decatur,+Georgia+30030&gl=us&t=m&z=14&ll=33.774048,-84.294923&output=embed"></iframe>
-
-      <p class="open-map">
-        <a href="https://maps.google.com/maps?q=340+Church+Street+Decatur,+GA+30030&amp;ie=UTF8&amp;hq=&amp;hnear=340+Church+St,+Decatur,+Georgia+30030&amp;gl=us&amp;t=m&amp;z=14&amp;ll=33.774048,-84.294923&amp;source=embed">Open Map</a>
-      </p>
 
     </section>
 
