@@ -611,4 +611,19 @@ function woothemes_woo_menu_metabox_add() {
 } // End woothemes_woo_menu_metabox_add()
 
 add_action('admin_menu', 'woothemes_woo_menu_metabox_add',1,1);
+
+// display order of media attachments
+add_filter('manage_media_columns', 'posts_columns_attachment_order', 1);
+add_action('manage_media_custom_column', 'posts_custom_columns_attachment_order', 1, 2);
+function posts_columns_attachment_order($defaults){
+    $defaults['wps_post_attachments_order'] = __('Order');
+    return $defaults;
+}
+function posts_custom_columns_attachment_order($column_name, $id){
+        if($column_name === 'wps_post_attachments_order'){
+          $post = get_post($id);
+          echo $post->menu_order;
+      }
+}
+
 ?>

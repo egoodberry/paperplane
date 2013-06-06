@@ -24,8 +24,14 @@
 <?php
 
       // get sorted menu types
-      $wpq = array( 'post_type' => 'woo_menu', 'taxonomy' => 'menutype', 'term' => $menu->slug, 'orderby' => 'menu_order', 'order' => 'ASC' );
-
+      $wpq = array(
+        'post_type' => 'woo_menu',
+        'taxonomy' => 'menutype',
+        'term' => $menu->slug,
+        'orderby' => 'menu_order',
+        'order' => 'ASC',
+        'posts_per_page' => -1
+      );
 
       $menu_items = new WP_Query( $wpq );
       foreach ( $menu_items->posts as $menu_item ) {
