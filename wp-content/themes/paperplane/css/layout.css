@@ -28,11 +28,13 @@
       top: 18px;
       text-align: center;
       z-index: -1; }
-      #header #header-inner nav a {
-        margin-right: 50px;
-        padding-bottom: 3px; }
-        #header #header-inner nav a:last-child {
-          margin-right: 0; }
+      #header #header-inner nav div {
+        display: inline-block;
+        margin-right: 50px; }
+        #header #header-inner nav div a {
+          padding-bottom: 3px; }
+          #header #header-inner nav div a:last-child {
+            margin-right: 0; }
 
 #content {
   padding: 60px 0; }
@@ -56,27 +58,32 @@ section#about {
 iframe {
   margin: 1.5em 0; }
 
+#expand {
+  display: none; }
+
 @media only screen and (max-width: 767px) {
   #header {
-    height: auto;
-    position: static; }
+    height: auto; }
     #header #header-inner {
       width: auto; }
-      #header #header-inner #logo {
-        float: left; }
-      #header #header-inner #brand {
+      #header #header-inner #logo, #header #header-inner #brand {
         display: none; }
+      #header #header-inner #expand {
+        display: block;
+        margin: 16px auto; }
       #header #header-inner nav {
+        display: none;
         position: static;
-        width: 150px;
-        float: right;
-        text-align: left; }
-        #header #header-inner nav a {
+        margin-top: 20px; }
+        #header #header-inner nav div {
           display: block;
-          margin: 4px 0; }
+          margin: 0; }
+          #header #header-inner nav div a {
+            margin: 10px 0;
+            padding-bottom: 0; }
 
   #content {
-    padding-top: 0; }
+    padding-top: 50px; }
     #content #menus .menu-item .name-and-description {
       float: none;
       text-align: center;

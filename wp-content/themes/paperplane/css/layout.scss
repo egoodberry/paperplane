@@ -39,11 +39,15 @@
       text-align: center;
       z-index: -1;
 
-      a {
+      div {
+        display: inline-block;
         margin-right: 50px;
-        padding-bottom: 3px;
-        &:last-child {
-          margin-right: 0;
+
+        a {
+          padding-bottom: 3px;
+          &:last-child {
+            margin-right: 0;
+          }
         }
       }
     }
@@ -84,37 +88,45 @@ iframe {
   margin: 1.5em 0;
 }
 
+#expand {
+  display: none;
+}
+
 @media only screen and (max-width: 767px) {
   #header {
     height: auto;
-    position: static;
 
     #header-inner {
       width: auto;
 
-      #logo {
-        float: left;
-      }
-      #brand {
+      #logo, #brand {
         display: none;
       }
 
+      #expand {
+        display: block;
+        margin: 16px auto;
+      }
       nav {
+        display: none;
         position: static;
-        width: 150px;
-        float: right;
-        text-align: left;
+        margin-top: 20px;
 
-        a {
+        div {
           display: block;
-          margin: 4px 0;
+          margin: 0;
+
+          a {
+            margin: 10px 0;
+            padding-bottom: 0;
+          }
         }
       }
     }
   }
 
   #content {
-    padding-top: 0;
+    padding-top: 50px;
 
     #menus .menu-item {
       .name-and-description {

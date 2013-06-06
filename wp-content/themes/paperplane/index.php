@@ -4,10 +4,10 @@
     <div id="header-inner">
 
       <nav>
-        <a href="#reserve">Reserve</a>
-        <a href="#about">About</a>
-        <a href="#menus">Menus</a>
-        <a href="#information">Information</a>
+        <div><a href="#reserve">Reserve</a></div>
+        <div><a href="#about">About</a></div>
+        <div><a href="#menus">Menus</a></div>
+        <div><a href="#information">Information</a></div>
       </nav>
 
       <a id="logo" href="#home" class="visualNav">
@@ -15,6 +15,10 @@
       </a>
 
       <a id="brand" href="http://www.vicsandwich.com"><div></div></a>
+
+      <a id="expand" href="#">
+        <img src="<?php bloginfo('template_directory'); ?>/images/expand.png" alt="Expand Menu" />
+      </a>
 
     </div>
   </div><!-- /header -->
