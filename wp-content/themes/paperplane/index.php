@@ -38,7 +38,7 @@
         <div>340 Church Street</div>
         <div>Decatur, GA 30030</div>
       </section>
-      <div class="phone">404 377 9300</div>
+      <div class="phone">404 377 9308</div>
     </section>
 
     <section id="contact" class="content">
