@@ -301,6 +301,11 @@ TABLE OF CONTENTS
        $content .= '</p>' . "\n";
 
        $content .= '<p class="form-field">' . "\n";
+        $content .= '<span class="phone"><label for="contact_tel">' . __( 'Phone', 'woothemes') . ':</label>' . "\n";
+        $content .= '<input type="text" name="contact_tel" class="input-contact_tel input-text required" value="' . $this->fields_for_form['contact_tel'] . '" /></span>' . "\n";
+       $content .= '</p>';
+
+       $content .= '<p class="form-field">' . "\n";
 
        // Remember the user's e-mail address, if they have been here before and have not yet filled in the form.
        $_email = $this->fields_for_form['contact_email'];
