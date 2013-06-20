@@ -37,7 +37,6 @@ Integrate the jQueryUI datepicker
   altField: '#reservation_date',
   minDate: new Date( currentYear, currentMonth, currentDay ),
   onSelect: function ( dateText, inst ) {
-
    var timeText = jQuery(this).parents('form').find('.reservation_time').val();
    var peopleText = jQuery(this).parents('form').find('.number_of_people').val();
    var pageId = jQuery(this).parents('form').find('.input-page_id').val();
@@ -53,9 +52,10 @@ Integrate the jQueryUI datepicker
       data: { 'date' : dateText, 'time' : timeText, 'ajax' : 1, 'ajax-action' : 'get_times', 'page_id' : pageId, 'is_admin' : isUpdate },
       success: function( data ) {
 
-        $('.customSelect.reservation_time').remove();
+        $('.reservation_time').select2('destroy');
+
         jQuery('form[name="wootable-booking-form"] .reservation_time').replaceWith(data);
-        $('select').customSelect();
+        App.setUpSelect();
 
         // Change the confirmation message.
         // wootable_widget_confirmation_message( dateText, timeText, peopleText, 'form[name="wootable-booking-form"] .confirmation_message', 'form[name="wootable-booking-form"]', 'generate_confirmation_message' );

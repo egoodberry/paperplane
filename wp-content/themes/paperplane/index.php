@@ -101,15 +101,11 @@
         <div class="row">
           <div class="grid_10 content">
             <p>
-              Our story begins with the question: What to drink? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse erat tellus, facilisis et commodo id, lacinia in purus.
+              Paper Plane is at its best an experience. An ever-changing menu of fine food and spirits. A warm, familiar space. A return to classic affairs. An old friend. A new one. An evening well spent.
             </p>
 
             <p>
-              We are Paul Calvert, Ian Jones, and Caleb Wheelus (one of us had to take the picture). Nunc malesuada convallis risus, vitae eleifend ipsum euismod in. Fusce vitae quam nisi, sed rutrum libero. Morbi eget justo eros. Curabitur placerat nisi non turpis auctor eget rutrum nulla volutpat.
-            </p>
-
-            <p>
-              Nisi nibh, ac euismod libero. Curabitur mauris sem, sollicitudin vel semper non, malesuada nec tellus. Nulla facilisi. Our answer: Paper Plane.
+              This is Paper Plane— vintage service, modern fare.
             </p>
           </div>
         </div>

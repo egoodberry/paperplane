@@ -207,6 +207,7 @@ hr {
 
 #about {
   p {
+    font-size: 1.5em;
     margin: 1em 0;
     line-height: 1.7em;
   }
@@ -361,14 +362,14 @@ label {
   width: 20%;
   margin-top: 5px;
 }
-input[type=text], textarea, .customSelect {
+input[type=text], textarea, .select2-container {
   background: $white;
   border: none;
   margin-left: 0;
   font-family: $paragraph-font;
   font-size: 21px;
 }
-input[type=text], .customSelect {
+input[type=text], .select2-container {
   height: 40px;
 }
 input[type=text], textarea {
@@ -379,11 +380,6 @@ input[type=text], textarea {
   margin-bottom: 15px;
   text-align: left;
 }
-.customSelectInner {
-  color: $black;
-  margin-top: 7px;
-  text-align: center;
-}
 form {
   padding-bottom: 4em;
 }
@@ -393,14 +389,23 @@ form {
       float: left;
     }
   }
-  .customSelect, select {
-    width: 30%;
+
+  .select2-container, select {
+    width: 29%;
     padding-right: 15px;
     background: $white url(../images/arrow-down.png) no-repeat right 5px top 50%;
-    .customSelectInner {
-      padding-left: 10px;
+    a {
+      border: none !important;
+      background-image: none !important;
+      background: transparent;
+      box-shadow: none;
+      margin-top: 6px;
+      div {
+        opacity: 0;
+      }
     }
   }
+
   .reservation-time-label {
     padding-left: 10px;
   }
@@ -419,6 +424,11 @@ form {
     }
   }
 }
+// select2's modal bit
+.select2-drop {
+  border: none;
+}
+
 
 .ui-dialog {
   background: $charcoal;
@@ -521,7 +531,10 @@ form {
       vertical-align: middle;
     }
   }
-  .slideshow-container .nav {
+  .vr {
+    height: 57px;
+  }
+  .slideshow-container .nav, .slideshow{
     display: none;
   }
   #wootable-calendar {
@@ -544,9 +557,6 @@ form {
     }
     select {
       opacity: 1 !important;
-    }
-    .customSelect {
-      display: none !important;
     }
   }
   .woo-sc-box {

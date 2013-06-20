@@ -156,6 +156,7 @@ hr {
     font-size: .8em; }
 
 #about p {
+  font-size: 1.5em;
   margin: 1em 0;
   line-height: 1.7em; }
 #about .nav {
@@ -276,14 +277,14 @@ label {
   width: 20%;
   margin-top: 5px; }
 
-input[type=text], textarea, .customSelect {
+input[type=text], textarea, .select2-container {
   background: white;
   border: none;
   margin-left: 0;
   font-family: "adobe-garamond-pro", "Times New Roman", serif;
   font-size: 21px; }
 
-input[type=text], .customSelect {
+input[type=text], .select2-container {
   height: 40px; }
 
 input[type=text], textarea {
@@ -294,22 +295,23 @@ input[type=text], textarea {
   margin-bottom: 15px;
   text-align: left; }
 
-.customSelectInner {
-  color: #0e100d;
-  margin-top: 7px;
-  text-align: center; }
-
 form {
   padding-bottom: 4em; }
 
 .reservations-form .people-time > * {
   float: left; }
-.reservations-form .customSelect, .reservations-form select {
-  width: 30%;
+.reservations-form .select2-container, .reservations-form select {
+  width: 29%;
   padding-right: 15px;
   background: white url(../images/arrow-down.png) no-repeat right 5px top 50%; }
-  .reservations-form .customSelect .customSelectInner, .reservations-form select .customSelectInner {
-    padding-left: 10px; }
+  .reservations-form .select2-container a, .reservations-form select a {
+    border: none !important;
+    background-image: none !important;
+    background: transparent;
+    box-shadow: none;
+    margin-top: 6px; }
+    .reservations-form .select2-container a div, .reservations-form select a div {
+      opacity: 0; }
 .reservations-form .reservation-time-label {
   padding-left: 10px; }
 .reservations-form .reservation_time {
@@ -323,6 +325,9 @@ form {
   padding-left: 20%; }
   .reservations-form label.error.valid {
     display: none !important; }
+
+.select2-drop {
+  border: none; }
 
 .ui-dialog {
   background: #252324;
@@ -410,7 +415,10 @@ form {
       margin: auto;
       vertical-align: middle; }
 
-  .slideshow-container .nav {
+  .vr {
+    height: 57px; }
+
+  .slideshow-container .nav, .slideshow {
     display: none; }
 
   #wootable-calendar {
@@ -430,8 +438,6 @@ form {
     display: block; }
   .reservations-form select {
     opacity: 1 !important; }
-  .reservations-form .customSelect {
-    display: none !important; }
 
   .woo-sc-box {
     width: auto !important; }

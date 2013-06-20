@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=335, initial-scale=1">
   <link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/vendor/reset.css" />
   <link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/vendor/grid.css" />
+  <link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/vendor/select.css" />
   <link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/layout.css" />
   <link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/style.css" />
   <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -26,5 +27,6 @@
   <script src="<?php bloginfo('template_directory'); ?>/js/slideshow.js"></script>
   <script src="<?php bloginfo('template_directory'); ?>/js/nav.js"></script>
   <script src="<?php bloginfo('template_directory'); ?>/js/bg.js"></script>
+  <script src="<?php bloginfo('template_directory'); ?>/js/select.js"></script>
 </head>
 <body>
