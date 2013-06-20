@@ -356,7 +356,12 @@ form {
       text-decoration: underline; }
 
 .reserve-header {
-  margin: .5em 0 2em 0; }
+  margin: .5em 0 3em 0; }
+  .reserve-header p {
+    line-height: 1.8em;
+    width: 55%;
+    margin: 0 auto;
+    margin-top: 2em; }
 
 .reserve-submit {
   margin: 3em 0; }
@@ -453,4 +458,7 @@ form {
   #about {
     font-size: 16px; }
     #about .grid_10 {
-      width: auto; } }
+      width: auto; }
+
+  .reserve-header p {
+    width: 85%; } }
