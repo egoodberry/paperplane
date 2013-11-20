@@ -40,17 +40,18 @@ a {
   letter-spacing: 4px;
   margin: 2em 0; }
 
-.cf:before,
-.cf:after {
+.cf:before, .datetime:before,
+.cf:after,
+.datetime:after {
   content: " ";
   /* 1 */
   display: table;
   /* 2 */ }
 
-.cf:after {
+.cf:after, .datetime:after {
   clear: both; }
 
-.cf {
+.cf, .datetime {
   *zoom: 1; }
 
 .vr {
@@ -253,6 +254,40 @@ hr {
   .ui-datepicker-calendar a {
     text-decoration: none; }
 
+#reservations {
+  padding: 1em 0; }
+
+.success-message,
+.error-message {
+  width: 100%;
+  padding: 4px;
+  font-family: "futura-pt", sans-serif; }
+
+.error-message {
+  background: #ff0000; }
+
+.success-message {
+  background: #fff;
+  color: #000; }
+
+#reservations form .form-row {
+  width: 500px;
+  margin: 1em auto; }
+#reservations form p {
+  font-style: italic;
+  width: 75%;
+  margin: 1em auto; }
+
+.datetime .date {
+  float: left;
+  width: 65%; }
+.datetime .time, .datetime .party-size {
+  float: left;
+  width: 33%;
+  margin-left: 2%; }
+.datetime .party-size {
+  margin-top: 1em; }
+
 input[type=submit], button {
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -264,45 +299,56 @@ input[type=submit], button {
   border: solid 1px white;
   -webkit-appearance: none;
   cursor: pointer;
-  text-decoration: none; }
+  text-decoration: none;
+  border-width: 6px;
+  padding: 20px 65px; }
   input[type=submit]:hover, button:hover {
     background: white;
     color: #0e100d; }
 
 label {
-  display: inline-block;
   font-family: "futura-pt", sans-serif;
   text-transform: uppercase;
-  float: left;
-  width: 20%;
   margin-top: 5px; }
+  label > span {
+    display: block;
+    text-align: left;
+    font-size: 17px;
+    letter-spacing: 2px;
+    margin-bottom: 3px; }
 
-input[type=text], textarea, .select2-container {
+input[type=text],
+input[type=email],
+textarea,
+.select2-container {
   background: white;
   border: none;
   margin-left: 0;
   font-family: "adobe-garamond-pro", "Times New Roman", serif;
   font-size: 21px; }
 
-input[type=text], .select2-container {
+input[type=text],
+input[type=email],
+.select2-container {
   height: 40px; }
 
-input[type=text], textarea {
-  width: 80%;
-  padding: 10px 20px; }
+input[type=text],
+input[type=email],
+textarea,
+select {
+  padding: 10px 20px;
+  width: 100%; }
 
 .form-field {
   margin-bottom: 15px;
   text-align: left; }
 
 form {
-  padding-bottom: 4em; }
+  padding-bottom: 2em; }
 
 .reservations-form .people-time > * {
   float: left; }
 .reservations-form .select2-container, .reservations-form select {
-  width: 29%;
-  padding-right: 15px;
   background: white url(../images/arrow-down.png) no-repeat right 5px top 50%; }
   .reservations-form .select2-container a, .reservations-form select a {
     border: none !important;
@@ -357,11 +403,15 @@ form {
 
 .reserve-header {
   margin: .5em 0 3em 0; }
+  .reserve-header .vr {
+    height: 75px; }
   .reserve-header p {
     line-height: 1.8em;
-    width: 55%;
+    width: 75%;
     margin: 0 auto;
     margin-top: 2em; }
+  .reserve-header hr {
+    width: 75%; }
 
 .reserve-submit {
   margin: 3em 0; }

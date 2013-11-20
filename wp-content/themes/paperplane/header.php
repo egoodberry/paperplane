@@ -28,5 +28,6 @@
   <script src="<?php bloginfo('template_directory'); ?>/js/nav.js"></script>
   <script src="<?php bloginfo('template_directory'); ?>/js/bg.js"></script>
   <script src="<?php bloginfo('template_directory'); ?>/js/select.js"></script>
+  <script src="<?php bloginfo('template_directory'); ?>/js/datepicker.js"></script>
 </head>
 <body>

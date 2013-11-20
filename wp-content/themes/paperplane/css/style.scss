@@ -346,42 +346,112 @@ hr {
   }
 }
 
+#reservations {
+  padding: 1em 0;
+}
+
+.success-message,
+.error-message {
+  width: 100%;
+  padding: 4px;
+  font-family: $header-font;
+}
+.error-message {
+  background: #ff0000;
+}
+.success-message {
+  background: #fff;
+  color: #000;
+}
+
 // forms
+#reservations form {
+  .form-row {
+    width: 500px;
+    margin: 1em auto;
+  }
+
+  p {
+    font-style: italic;
+    width: 75%;
+    margin: 1em auto;
+  }
+}
+
+.datetime {
+  @extend .cf;
+
+  .date {
+    float: left;
+    width: 65%;
+  }
+
+  .time, .party-size {
+    float: left;
+    width: 33%;
+    margin-left: 2%;
+  }
+
+  .party-size {
+    margin-top: 1em;
+  }
+}
+
 input[type=submit], button {
   @include button;
+  border-width: 6px;
+  padding: 20px 65px;
+
   &:hover {
     background: $white;
     color: $black;
   }
 }
+
 label {
-  display: inline-block;
   font-family: $header-font;
   text-transform: uppercase;
-  float: left;
-  width: 20%;
   margin-top: 5px;
+
+  &>span {
+    display: block;
+    text-align: left;
+    font-size: 17px;
+    letter-spacing: 2px;
+    margin-bottom: 3px;
+  }
 }
-input[type=text], textarea, .select2-container {
+
+input[type=text],
+input[type=email],
+textarea,
+.select2-container {
   background: $white;
   border: none;
   margin-left: 0;
   font-family: $paragraph-font;
   font-size: 21px;
 }
-input[type=text], .select2-container {
+
+input[type=text],
+input[type=email],
+.select2-container {
   height: 40px;
 }
-input[type=text], textarea {
-  width: 80%;
+
+input[type=text],
+input[type=email],
+textarea,
+select {
   padding: 10px 20px;
+  width: 100%;
 }
 .form-field {
   margin-bottom: 15px;
   text-align: left;
 }
 form {
-  padding-bottom: 4em;
+  padding-bottom: 2em;
 }
 .reservations-form {
   .people-time {
@@ -391,8 +461,6 @@ form {
   }
 
   .select2-container, select {
-    width: 29%;
-    padding-right: 15px;
     background: $white url(../images/arrow-down.png) no-repeat right 5px top 50%;
     a {
       border: none !important;
@@ -468,11 +536,19 @@ form {
 .reserve-header {
   margin: .5em 0 3em 0;
 
+  .vr {
+    height: 75px;
+  }
+
   p {
     line-height: 1.8em;
-    width: 55%;
+    width: 75%;
     margin: 0 auto;
     margin-top: 2em;
+  }
+
+  hr {
+    width: 75%;
   }
 }
 .reserve-submit {

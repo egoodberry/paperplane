@@ -49,7 +49,7 @@
         </h1>
         <div class="vr">&nbsp;</div>
 
-        <p class="reserve-warning">Reservations are available for parties of 3 or more.</p>
+        <p class="reserve-warning">Reservations are available for parties of 5 or more.</p>
 
         <a href="/reservations" class="button">Book a Table</a>
 

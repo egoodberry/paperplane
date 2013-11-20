@@ -5,4 +5,5 @@ $(function() {
   App.stretchBackground();
   App.setUpSlideshows();
   App.setUpSelect();
+  App.setUpDatepicker();
 });
