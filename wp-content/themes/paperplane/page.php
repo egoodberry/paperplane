@@ -85,8 +85,8 @@
       <div class="vr">&nbsp;</div>
 
       <p>
-        Reservation requests are available to groups of 4 or more, and must be placed at least 3 days in advance.
-        Parties of 3 or less are welcome to join us on a first come first serve basis. Fill out all fields and we
+        Reservation requests are available to groups of 4 or more.
+        Parties of 3 or less are welcome to join us on a first come first serve basis. Please fill out all fields and we
         will respond shortly with a confirmation, or the closest alternative available.
       </p>
       <hr class="large" />
