@@ -32,7 +32,7 @@
 
       <img src="<?php bloginfo('template_directory'); ?>/images/title.png" alt="Paper Plane" class="title" />
       <hr />
-      <p>Open <i>at</i> 5.00p Tuesday <i>to</i> Saturday</p>
+      <p>Open <i>at</i> 5.00p Monday <i>to</i> Saturday</p>
       <div class="vr">&nbsp;</div>
       <section class="address">
         <div>340 Church Street</div>
@@ -61,9 +61,9 @@
           <h3>
             Operating Hours
           </h3>
-          <p>Tuesday to Thursday, 5.00p &#8212; 12.00a</p>
+          <p>Monday to Thursday, 5.00p &#8212; 12.00a</p>
           <p>Friday to Saturday, 5.00p &#8212; 1.00a</p>
-          <p>Sunday and Monday, Closed</p>
+          <p>Sunday, Closed</p>
         </section>
 
         <section class="links">
